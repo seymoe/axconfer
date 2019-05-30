@@ -2,23 +2,23 @@
   <div>
     <section class="hero is-light is-medium">
       <div class="hero-head">
-        <Header/>
+        <Header />
       </div>
       <div class="hero-body">
         <div class="container has-text-centered">
           <h1 class="title">
-          2019年工程热物理学会工程热力学与能源利用分会
+            {{ conferList[0]['title'] }}
           </h1>
           <h2 class="subtitle">
-          The Engineering Thermodynamics and Energy Utilization Branch of the Engineering Thermophysics Society
-          <br>
-          2019.11.1-11.3 中国 桂林
+            {{ conferList[0]['subtitle'].split('----')[0] }}
+            <br>
+            {{ conferList[0]['subtitle'].split('----')[1] }}
           </h2>
         </div>
       </div>
     </section>
     <nuxt />
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
@@ -30,6 +30,14 @@ export default {
   components: {
     Header,
     Footer
+  },
+  computed: {
+    conferList() {
+      if (this.$store.state.conference.length) {
+        return this.$store.state.conference
+      }
+      return []
+    }
   }
 }
 </script>

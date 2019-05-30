@@ -10,14 +10,11 @@
           <div class="card">
             <header class="card-header">
               <p class="card-header-title">
-                组织结构 {{params.slug}}
+                {{ pageData.title }}
               </p>
             </header>
             <div class="card-content">
-              <div class="content">
-                <p>Purus semper eget duis at tellus at urna condimentum mattis. Non blandit massa enim nec. Integer enim neque volutpat ac tincidunt vitae semper quis. Accumsan tortor posuere ac ut consequat semper viverra nam.</p>
-                <p><a href="#">Learn more</a></p>
-              </div>
+              <div class="content" v-html="pageData.content" />
             </div>
           </div>
         </div>
@@ -28,13 +25,15 @@
 
 <script>
 import Sidebar from '~/components/Sidebar.vue'
-
+import axios from '~/plugins/axios'
 export default {
   components: {
     Sidebar
   },
-  asyncData({ params }) {
-    return { params: params }
+  async asyncData(context) {
+    const res = await axios.get('/pages?slug=' + context.params.slug)
+    console.log(res.data)
+    return { pageData: res.data.length ? res.data[0] : {} }
   }
 }
 </script>
