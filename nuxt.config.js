@@ -31,6 +31,10 @@ export default {
     linkExactActiveClass: 'is-active'
   },
 
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://api.thermophysics.cn'
+  },
+
   /*
   ** Global CSS
   */
@@ -41,6 +45,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~/plugins/axios.js' },
+    { src: '~/plugins/vue-notifications', ssr: false }
   ],
 
   /*
@@ -83,6 +89,7 @@ export default {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    transpile: ['vue-notifications']
   }
 }

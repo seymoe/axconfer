@@ -7,9 +7,9 @@
           工程热物理
         </a>
         <span class="navbar-burger burger" data-target="navbarMenu">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span />
+          <span />
+          <span />
         </span>
       </div>
       <div id="navbarMenu" class="navbar-menu">
@@ -32,24 +32,46 @@
           <nuxt-link to="/contact" class="navbar-item">
             联系我们
           </nuxt-link>
-          <span class="navbar-item">
-            <nuxt-link to="/login" class="button is-grey is-outlined">
-              <span class="icon">
-                <i class="fa fa-github"></i>
-              </span>
-              <span>登录</span>
+          <template v-if="token">
+            <nuxt-link to="/paper" class="navbar-item">
+              {{ userInfo.username }}
             </nuxt-link>
-          </span>
-          <span class="navbar-item">
-            <nuxt-link to="/register" class="button is-grey is-outlined">
-              <span class="icon">
-                <i class="fa fa-github"></i>
-              </span>
-              <span>注册</span>
-            </nuxt-link>
-          </span>
+          </template>
+          <template v-else>
+            <span class="navbar-item">
+              <nuxt-link to="/login" class="button is-grey is-outlined">
+                <span class="icon">
+                  <i class="fa fa-github" />
+                </span>
+                <span>登录</span>
+              </nuxt-link>
+            </span>
+            <span class="navbar-item">
+              <nuxt-link to="/register" class="button is-grey is-outlined">
+                <span class="icon">
+                  <i class="fa fa-github" />
+                </span>
+                <span>注册</span>
+              </nuxt-link>
+            </span>
+          </template>
         </div>
       </div>
     </div>
   </nav>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+export default {
+  data() {
+    return {}
+  },
+  computed: {
+    ...mapGetters({
+      token: 'user/getToken',
+      userInfo: 'user/getUserInfo'
+    })
+  }
+}
+</script>
