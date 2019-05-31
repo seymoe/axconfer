@@ -52,6 +52,7 @@ export default {
     }
   },
   methods: {
+    // TODO: fetchUserInfo Vuex的action中
     async fetchUserInfo(token) {
       try {
         return await axios.get('/users/me', {
@@ -64,6 +65,7 @@ export default {
         return false
       }
     },
+    // 注册完成->有token->保存Vuex State 设置 Cookie，登录的时候如果Cookie中有token，获取全局的用户信息
     async handleRegist() {
       try {
         const { username, email, password } = this.form

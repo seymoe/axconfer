@@ -34,44 +34,26 @@
           </nuxt-link>
           <template v-if="token && userInfo.role">
             <!-- auth -->
-            <b-dropdown v-if="userInfo.role.name === 'Authenticated'" hoverable aria-role="list">
-              <button slot="trigger" class="button is-info">
+            <b-dropdown hoverable aria-role="list">
+              <a class="navbar-item" slot="trigger" role="button">
+                <b-icon icon="account"></b-icon>
                 <span>{{ userInfo.username }}</span>
-                <b-icon icon="menu-down" />
-              </button>
-
-              <b-dropdown-item aria-role="listitem">
-                我的论文
+                <b-icon icon="menu-down"></b-icon>
+              </a>
+              <b-dropdown-item v-if="userInfo.role.name === 'Authenticated'" aria-role="listitem">
+                <b-icon icon="file" size="is-small"></b-icon>
+                <nuxt-link to="/paper/me">我的论文</nuxt-link>
               </b-dropdown-item>
-              <b-dropdown-item aria-role="listitem" @click="handleLogout">
-                退出登录
-              </b-dropdown-item>
-            </b-dropdown>
-            <!-- professor -->
-            <b-dropdown v-else-if="userInfo.role.name === 'Professor'" hoverable aria-role="list">
-              <button slot="trigger" class="button is-info">
-                <span>{{ userInfo.username }}</span>
-                <b-icon icon="menu-down" />
-              </button>
-
-              <b-dropdown-item aria-role="listitem">
+              <b-dropdown-item v-else-if="userInfo.role.name === 'Professor'" aria-role="listitem">
+                <b-icon icon="file-find" size="is-small"></b-icon>
                 审阅论文
               </b-dropdown-item>
-              <b-dropdown-item aria-role="listitem" @click="handleLogout">
-                退出登录
-              </b-dropdown-item>
-            </b-dropdown>
-            <!-- admin -->
-            <b-dropdown v-else-if="userInfo.role.name === 'Administrator'" hoverable aria-role="list">
-              <button slot="trigger" class="button is-info">
-                <span>{{ userInfo.username }}</span>
-                <b-icon icon="menu-down" />
-              </button>
-
-              <b-dropdown-item aria-role="listitem">
+              <b-dropdown-item v-else-if="userInfo.role.name === 'Administrator'" aria-role="listitem">
+                <b-icon icon="animation" size="is-small"></b-icon>
                 管理论文
               </b-dropdown-item>
               <b-dropdown-item aria-role="listitem" @click="handleLogout">
+                <b-icon icon="logout" size="is-small"></b-icon>
                 退出登录
               </b-dropdown-item>
             </b-dropdown>
@@ -79,17 +61,19 @@
           <template v-else>
             <span class="navbar-item">
               <nuxt-link to="/login" class="button is-grey is-outlined">
-                <span class="icon">
-                  <i class="fa fa-github" />
-                </span>
+                <b-icon
+                  icon="account"
+                  size="is-small">
+                </b-icon>
                 <span>登录</span>
               </nuxt-link>
             </span>
             <span class="navbar-item">
               <nuxt-link to="/register" class="button is-grey is-outlined">
-                <span class="icon">
-                  <i class="fa fa-github" />
-                </span>
+                <b-icon
+                  icon="account"
+                  size="is-small">
+                </b-icon>
                 <span>注册</span>
               </nuxt-link>
             </span>

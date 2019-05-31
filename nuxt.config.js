@@ -54,7 +54,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    // Doc:https://github.com/nuxt-community/modules/tree/master/packages/bulma
+    // Doc: https://github.com/buefy/nuxt-buefy
     'nuxt-buefy'
   ],
   /*
