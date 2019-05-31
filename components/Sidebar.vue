@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import marked from 'marked'
+import { mdToHtml } from '~/plugins/utils'
 import { mapGetters } from 'vuex'
 export default {
   computed: {
@@ -44,10 +44,10 @@ export default {
       sbPartner: 'getsideBarPartner'
     }),
     htmlSbHost() {
-      return marked(this.sbHost.content)
+      return mdToHtml(this.sbHost.content)
     },
     htmlSbPartner() {
-      return marked(this.sbPartner.content)
+      return mdToHtml(this.sbPartner.content)
     }
   }
 }

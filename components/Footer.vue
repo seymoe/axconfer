@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import marked from 'marked'
+import { mdToHtml } from '~/plugins/utils'
 import { mapGetters } from 'vuex'
 export default {
   computed: {
@@ -45,13 +45,13 @@ export default {
       footPartner: 'getFootPartner'
     }),
     htmlFootPartner() {
-      return marked(this.footPartner.content)
+      return mdToHtml(this.footPartner.content)
     },
     htmlFootSitemap() {
-      return marked(this.footSitemap.content)
+      return mdToHtml(this.footSitemap.content)
     },
     htmlFootInstitute() {
-      return marked(this.footInstitute.content)
+      return mdToHtml(this.footInstitute.content)
     }
   }
 }

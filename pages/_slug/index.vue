@@ -24,9 +24,9 @@
 </template>
 
 <script>
-import marked from 'marked'
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
+import { mdToHtml } from '~/plugins/utils'
 export default {
   components: {
     Sidebar
@@ -34,7 +34,7 @@ export default {
   computed: {
     contentHtml() {
       if (this.pageData.content) {
-        return marked(this.pageData.content)
+        return mdToHtml(this.pageData.content)
       } else {
         return ''
       }

@@ -53,6 +53,8 @@ export const actions = {
     commit('user/setToken', token)
     commit('user/setUserInfo', userInfo)
 
+    console.log(token)
+
     // 顶部会议数据
     const resConfer = await axios.get('/conferences?_limit=1')
     commit('setConference', resConfer.data || [])

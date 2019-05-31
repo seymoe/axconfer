@@ -52,6 +52,18 @@ export default {
     }
   },
   methods: {
+    async fetchUserInfo(token) {
+      try {
+        return await axios.get('/users/me', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+      } catch (err) {
+        console.log(err)
+        return false
+      }
+    },
     async handleRegist() {
       try {
         const { username, email, password } = this.form
@@ -69,9 +81,13 @@ export default {
           username,
           email,
           password
+        }, {
+          headers: {}
         })
         console.log(res)
         if (res.status === 200) {
+          // 获取用户信息
+          const userInfo = await this.fetchUserInfo(res.data.jwt)
           // 成功
           this.$notification.open({
             message: '注册成功',
@@ -80,12 +96,18 @@ export default {
           })
           setTimeout(() => {
             this.$store.commit('user/setToken', res.data.jwt)
-            this.$store.commit('user/setUserInfo', res.data.user)
+            this.$store.commit('user/setUserInfo', userInfo.data)
             Cookie.set('token', res.data.jwt)
-            Cookie.set('userInfo', JSON.stringify(res.data.user))
+            Cookie.set('userInfo', JSON.stringify(userInfo.data))
             this.isSubmiting = false
             this.$router.push('/')
           }, 0)
+        } else {
+          this.$notification.open({
+            message: '注册失败',
+            type: 'is-warning',
+            position: 'is-top'
+          })
         }
         this.isSubmiting = false
       } catch (err) {

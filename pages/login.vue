@@ -65,6 +65,8 @@ export default {
         const res = await axios.post('/auth/local', {
           identifier,
           password
+        }, {
+          headers: {}
         })
         console.log(res)
         if (res.status === 200) {
@@ -79,9 +81,15 @@ export default {
             this.$store.commit('user/setUserInfo', res.data.user)
             Cookie.set('token', res.data.jwt)
             Cookie.set('userInfo', JSON.stringify(res.data.user))
-            this.isSubmiting = false
             this.$router.push('/')
           }, 0)
+        } else {
+          this.$notification.open({
+            message: '登录失败',
+            type: 'is-warning',
+            position: 'is-top'
+          })
+          this.isSubmiting = false
         }
       } catch (err) {
         console.log(err)
