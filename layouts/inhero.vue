@@ -20,3 +20,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.hero.is-light{
+  background-color: #212121;
+}
+</style>

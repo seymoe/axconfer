@@ -15,9 +15,8 @@
             </header>
             <div class="card-content">
               <b-field label="Name">
-                <b-input value="Kevin Garvey"></b-input>
+                <b-input value="Kevin Garvey" />
               </b-field>
-
             </div>
           </div>
         </div>

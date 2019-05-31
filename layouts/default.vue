@@ -41,3 +41,28 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.hero{
+  position: relative;
+  background-image: url(https://s1.ax1x.com/2018/02/10/9G1HDH.jpg);
+  background-position: center center;
+  background-size: cover;
+}
+.hero::before{
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+}
+.hero.is-light .title{
+  color: #fff;
+}
+.hero.is-light .subtitle{
+  color: #fff;
+}
+</style>

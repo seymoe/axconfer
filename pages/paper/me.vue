@@ -17,8 +17,8 @@
               <!-- <b-table :data="paperData" :columns="paperColumns"></b-table> -->
               <b-table
                 :data="paperData"
-                :hoverable="true">
-
+                :hoverable="true"
+              >
                 <template slot-scope="props">
                   <b-table-column field="pid" label="论文ID" width="40">
                     {{ props.row.pid }}
@@ -33,9 +33,13 @@
                   </b-table-column>
 
                   <b-table-column field="action" label="操作" centered>
-                    <nuxt-link class="button is-small" to="/paper/id">查看</nuxt-link>
+                    <nuxt-link class="button is-small" :to="'/paper/' + props.row.id">
+                      查看
+                    </nuxt-link>
+                    <nuxt-link class="button is-small" :to="'/paper/' + props.row.id + '/edit'">
+                      编辑
+                    </nuxt-link>
                   </b-table-column>
-
                 </template>
 
                 <template slot="empty">
@@ -44,8 +48,8 @@
                       <p>
                         <b-icon
                           icon="emoticon-sad"
-                          size="is-large">
-                        </b-icon>
+                          size="is-large"
+                        />
                       </p>
                       <p>没有论文</p>
                     </div>
@@ -62,11 +66,13 @@
 
 <script>
 import Sidebar from '~/components/Sidebar.vue'
-// import axios from '~/plugins/axios'
+import axios from '~/plugins/axios'
+
 export default {
   components: {
     Sidebar
   },
+
   data() {
     return {
       isEmpty: false,
@@ -77,21 +83,31 @@ export default {
         { field: 'keywords', label: '关键词', width: '120' },
         { field: 'author', label: '作者', width: '120' }
       ],
-      paperData: [
-        { 'id': '5ceddc4d212fd47ee20750c3', 'pid': '191001', 'title': '基于人工智能神经网络的分析研究数据挖掘', 'topic': '基础热力学', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191002', 'title': 'John', 'topic': '可再生能源', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191003', 'title': 'John', 'topic': '可再生能源', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191001', 'title': 'Jesse', 'topic': '基础热力学', 'status': '评阅中', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191002', 'title': 'John', 'topic': '可再生能源', 'status': '评阅中', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191003', 'title': 'John', 'topic': '可再生能源', 'status': '已评阅', 'keywords': 'word1, word2', 'author': '作者' }
-      ]
+      paperData: []
     }
   },
-  computed: {
 
-  },
-  async asyncData(context) {
-
+  async asyncData({ req, store }) {
+    try {
+      const token = store.state.user.token
+      const userId = store.state.user.userInfo.id
+      if (token && userId) {
+        const res = await axios.get('/papers?user=' + userId, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        if (res.status === 200) {
+          return { paperData: res.data }
+        } else {
+          // 返回首页登录
+        }
+      } else {
+        // 返回首页登录
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 </script>

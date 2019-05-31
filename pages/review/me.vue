@@ -14,9 +14,7 @@
               </p>
             </header>
             <div class="card-content">
-              <b-table :data="paperData" :columns="paperColumns">
-              </b-table>
-
+              <b-table :data="paperData" :columns="paperColumns" />
             </div>
           </div>
         </div>
@@ -27,7 +25,7 @@
 
 <script>
 import Sidebar from '~/components/Sidebar.vue'
-// import axios from '~/plugins/axios'
+import axios from '~/plugins/axios'
 export default {
   components: {
     Sidebar
@@ -35,27 +33,38 @@ export default {
   data() {
     return {
       paperColumns: [
-        { field: 'pid', label: '论文编号', width: '100' },
-        { field: 'title', label: '论文标题', width: '300' },
-        { field: 'topic', label: '领域', width: '120' },
-        { field: 'author', label: '作者', width: '120' },
-        { field: 'status', label: '状态', width: '120' }
+        { field: 'paper.pid', label: '论文编号', width: '100' },
+        { field: 'paper.title', label: '论文标题', width: '300' },
+        { field: 'status', label: '评阅状态', width: '120' },
+        { field: '', label: '操作', width: '120' }
       ],
-      paperData: [
-        { 'pid': '191001', 'title': '基于人工智能神经网络的分析研究数据挖掘', 'topic': '基础热力学', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191002', 'title': 'John', 'topic': '可再生能源', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191003', 'title': 'John', 'topic': '可再生能源', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191001', 'title': 'Jesse', 'topic': '基础热力学', 'status': '评阅中', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191002', 'title': 'John', 'topic': '可再生能源', 'status': '评阅中', 'keywords': 'word1, word2', 'author': '作者' },
-        { 'pid': '191003', 'title': 'John', 'topic': '可再生能源', 'status': '已评阅', 'keywords': 'word1, word2', 'author': '作者' }
-      ]
+      paperData: []
     }
   },
   computed: {
 
   },
-  async asyncData(context) {
-
+  async asyncData({ req, store }) {
+    try {
+      const token = store.state.user.token
+      const userId = store.state.user.userInfo.id
+      if (token && userId) {
+        const res = await axios.get('/reviews?user=' + userId, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        if (res.status === 200) {
+          return { paperData: res.data }
+        } else {
+          // 返回首页登录
+        }
+      } else {
+        // 返回首页登录
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 </script>
