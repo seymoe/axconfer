@@ -6,7 +6,7 @@
         <div class="column is-3">
           <Sidebar />
         </div>
-        <div class="column is-8">
+        <div class="column is-9">
           <div class="card">
             <header class="card-header">
               <p class="card-header-title">
@@ -14,7 +14,7 @@
               </p>
             </header>
             <div class="card-content">
-              <div class="content" v-html="pageData.content" />
+              <div class="content" v-html="contentHtml" />
             </div>
           </div>
         </div>
@@ -24,11 +24,21 @@
 </template>
 
 <script>
+import marked from 'marked'
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 export default {
   components: {
     Sidebar
+  },
+  computed: {
+    contentHtml() {
+      if (this.pageData.content) {
+        return marked(this.pageData.content)
+      } else {
+        return ''
+      }
+    }
   },
   async asyncData(context) {
     const res = await axios.get('/pages?slug=' + context.params.slug)

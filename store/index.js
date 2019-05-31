@@ -4,16 +4,36 @@ const cookieparser = process.server ? require('cookieparser') : undefined
 
 export const state = () => ({
   conference: [],
-  sidebarHost: [],
-  sidebarPartner: [],
-  footerInstitute: [],
-  footerSiteMap: [],
-  footerPartner: []
+  cards: {}
 })
 
 export const mutations = {
   setConference(state, payload) {
     state.conference = payload
+  },
+  setCards(state, payload) {
+    state.cards = payload
+  }
+}
+
+export const getters = {
+  getSideBarMenu(state) {
+    return state.cards['sidebar-menu'] || {}
+  },
+  getsideBarHost(state) {
+    return state.cards['sidebar-host'] || {}
+  },
+  getsideBarPartner(state) {
+    return state.cards['sidebar-partner'] || {}
+  },
+  getFootInstitute(state) {
+    return state.cards['footer-institute'] || {}
+  },
+  getFootSitemap(state) {
+    return state.cards['footer-sitemap'] || {}
+  },
+  getFootPartner(state) {
+    return state.cards['footer-partner'] || {}
   }
 }
 
@@ -30,15 +50,21 @@ export const actions = {
         // No valid cookie found
       }
     }
-    console.log(userInfo)
     commit('user/setToken', token)
     commit('user/setUserInfo', userInfo)
 
     // 顶部会议数据
     const resConfer = await axios.get('/conferences?_limit=1')
-    commit('setConference', resConfer.data)
+    commit('setConference', resConfer.data || [])
     // 左侧边栏数据
-    // const resSidebar = await context.$axios.get('/cards?_slug=sidebar-host')
-    // console.log(resSidebar)
+    const resCards = await axios.get('/cards')
+    if (resCards.data.length) {
+      const obj = {}
+      resCards.data.forEach((item) => {
+        obj[item.slug] = item
+      })
+      console.log(obj)
+      commit('setCards', obj)
+    }
   }
 }

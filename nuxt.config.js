@@ -45,8 +45,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/axios.js' },
-    { src: '~/plugins/vue-notifications', ssr: false }
+    { src: '~/plugins/axios.js' }
   ],
 
   /*
@@ -56,7 +55,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc:https://github.com/nuxt-community/modules/tree/master/packages/bulma
-    '@nuxtjs/bulma'
+    'nuxt-buefy'
   ],
   /*
   ** Axios module configuration
