@@ -1,12 +1,12 @@
 <template>
   <div>
-    <section class="hero is-light is-fullheight">
+    <section class="hero is-light">
       <div class="hero-head">
         <Header />
       </div>
-      <div class="hero-body">
-        <nuxt />
-      </div>
+    </section>
+    <section class="section">
+      <nuxt />
     </section>
   </div>
 </template>

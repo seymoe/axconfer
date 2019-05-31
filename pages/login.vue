@@ -28,7 +28,7 @@
         </form>
       </div>
       <p class="has-text-grey">
-        <a href="/">注册</a> &nbsp;·&nbsp;
+        <a href="/register">注册</a> &nbsp;·&nbsp;
         <a href="/">忘记密码</a> &nbsp;·&nbsp;
         <a href="/">需要帮助？</a>
       </p>
@@ -65,19 +65,39 @@ export default {
         const res = await axios.post('/auth/local', {
           identifier,
           password
+        }, {
+          headers: {}
         })
         console.log(res)
         if (res.status === 200) {
           // 成功
-          this.$store.commit('user/setToken', res.data.jwt)
-          this.$store.commit('user/setUserInfo', res.data.user)
-          Cookie.set('token', res.data.jwt)
-          Cookie.set('userInfo', JSON.stringify(res.data.user))
-          this.$router.push('/')
+          this.$notification.open({
+            message: '登录成功',
+            type: 'is-success',
+            position: 'is-top'
+          })
+          setTimeout(() => {
+            this.$store.commit('user/setToken', res.data.jwt)
+            this.$store.commit('user/setUserInfo', res.data.user)
+            Cookie.set('token', res.data.jwt)
+            Cookie.set('userInfo', JSON.stringify(res.data.user))
+            this.$router.push('/')
+          }, 0)
+        } else {
+          this.$notification.open({
+            message: '登录失败',
+            type: 'is-warning',
+            position: 'is-top'
+          })
+          this.isSubmiting = false
         }
-        this.isSubmiting = false
       } catch (err) {
         console.log(err)
+        this.$notification.open({
+          message: '登录失败',
+          type: 'is-warning',
+          position: 'is-top'
+        })
         this.isSubmiting = false
       }
     }
