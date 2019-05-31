@@ -56,6 +56,11 @@
                   </section>
                 </template>
               </b-table>
+              <div class="foot">
+                <nuxt-link class="button is-small" :to="'/paper/create'">
+                  创建论文
+                </nuxt-link>
+              </div>
             </div>
           </div>
         </div>
@@ -111,3 +116,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.foot{
+  margin-top: 14px;
+}
+</style>

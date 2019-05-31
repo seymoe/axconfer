@@ -37,8 +37,8 @@
               </b-field>
               <b-field label="论文主题">
                 <b-select v-model="paper.topic" placeholder="选择主题" expanded>
-                  <option v-for="opt in topics" :key="opt.id" :value="opt.label">
-                    {{ opt.label }}
+                  <option v-for="topic in topics" :key="topic.id" :value="topic.label">
+                    {{ topic.label }}
                   </option>
                 </b-select>
               </b-field>

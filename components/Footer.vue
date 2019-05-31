@@ -59,6 +59,7 @@ export default {
 
 <style scoped>
 .footer-top{
+  margin-top: 20px;
   padding: 2rem 1.5rem;
   background-color: #202020;
   color: rgb(149, 149, 149);;
