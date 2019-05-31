@@ -46,11 +46,11 @@
               </b-dropdown-item>
               <b-dropdown-item v-else-if="userInfo.role.name === 'Professor'" aria-role="listitem">
                 <b-icon icon="file-find" size="is-small"></b-icon>
-                审阅论文
+                <nuxt-link to="/review/me">审阅论文</nuxt-link>
               </b-dropdown-item>
               <b-dropdown-item v-else-if="userInfo.role.name === 'Administrator'" aria-role="listitem">
                 <b-icon icon="animation" size="is-small"></b-icon>
-                管理论文
+                <nuxt-link to="/admin/assign">管理论文</nuxt-link>
               </b-dropdown-item>
               <b-dropdown-item aria-role="listitem" @click="handleLogout">
                 <b-icon icon="logout" size="is-small"></b-icon>

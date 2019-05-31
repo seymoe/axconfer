@@ -14,7 +14,44 @@
               </p>
             </header>
             <div class="card-content">
-              <b-table :data="paperData" :columns="paperColumns"></b-table>
+              <!-- <b-table :data="paperData" :columns="paperColumns"></b-table> -->
+              <b-table
+                :data="paperData"
+                :hoverable="true">
+
+                <template slot-scope="props">
+                  <b-table-column field="pid" label="论文ID" width="40">
+                    {{ props.row.pid }}
+                  </b-table-column>
+
+                  <b-table-column field="title" label="标题">
+                    {{ props.row.title }}
+                  </b-table-column>
+
+                  <b-table-column field="topic" label="主题">
+                    {{ props.row.topic }}
+                  </b-table-column>
+
+                  <b-table-column field="action" label="操作" centered>
+                    <nuxt-link class="button is-small" to="/paper/id">查看</nuxt-link>
+                  </b-table-column>
+
+                </template>
+
+                <template slot="empty">
+                  <section class="section">
+                    <div class="content has-text-grey has-text-centered">
+                      <p>
+                        <b-icon
+                          icon="emoticon-sad"
+                          size="is-large">
+                        </b-icon>
+                      </p>
+                      <p>没有论文</p>
+                    </div>
+                  </section>
+                </template>
+              </b-table>
             </div>
           </div>
         </div>
@@ -32,6 +69,7 @@ export default {
   },
   data() {
     return {
+      isEmpty: false,
       paperColumns: [
         { field: 'pid', label: '论文编号', width: '100' },
         { field: 'title', label: '论文标题', width: '300' },
@@ -40,7 +78,7 @@ export default {
         { field: 'author', label: '作者', width: '120' }
       ],
       paperData: [
-        { 'pid': '191001', 'title': '基于人工智能神经网络的分析研究数据挖掘', 'topic': '基础热力学', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
+        { 'id': '5ceddc4d212fd47ee20750c3', 'pid': '191001', 'title': '基于人工智能神经网络的分析研究数据挖掘', 'topic': '基础热力学', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
         { 'pid': '191002', 'title': 'John', 'topic': '可再生能源', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
         { 'pid': '191003', 'title': 'John', 'topic': '可再生能源', 'status': '未评阅', 'keywords': 'word1, word2', 'author': '作者' },
         { 'pid': '191001', 'title': 'Jesse', 'topic': '基础热力学', 'status': '评阅中', 'keywords': 'word1, word2', 'author': '作者' },
@@ -56,6 +94,4 @@ export default {
 
   }
 }
-</script>
-
 </script>
