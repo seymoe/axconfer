@@ -114,7 +114,7 @@ export default {
         type: 'is-success',
         position: 'is-top'
       })
-      window.location.href = '/'
+      this.$router.replace('/')
     }
   }
 }

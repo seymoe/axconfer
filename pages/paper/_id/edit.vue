@@ -17,14 +17,26 @@
               <b-field label="论文标题">
                 <b-input v-model="paper.title" />
               </b-field>
-              <b-field label="论文作者（请用分号隔开）">
-                <b-input v-model="paper.author" />
+              <b-field label="作者">
+                <b-taginput
+                  v-model="paper.author"
+                  icon="label"
+                  placeholder="添加作者"
+                />
               </b-field>
-              <b-field label="关键词（请用分号隔开）">
-                <b-input v-model="paper.keywords" />
+              <b-field label="单位">
+                <b-taginput
+                  v-model="paper.department"
+                  icon="label"
+                  placeholder="添加单位"
+                />
               </b-field>
-              <b-field label="投稿单位">
-                <b-input v-model="paper.department" />
+              <b-field label="关键词">
+                <b-taginput
+                  v-model="paper.keywords"
+                  icon="label"
+                  placeholder="添加关键词"
+                />
               </b-field>
               <b-field label="单位邮编">
                 <b-input v-model="paper.postcode" />
@@ -45,7 +57,7 @@
               <b-field
                 label="上传论文"
               />
-              <b-button type="is-primary">
+              <b-button type="is-primary" @click="handleSubmit">
                 提交
               </b-button>
             </div>
@@ -60,6 +72,7 @@
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 export default {
+  middleware: 'auth',
   components: {
     Sidebar
   },
@@ -68,14 +81,13 @@ export default {
       paper: {
         pid: '',
         title: '',
-        author: '',
-        department: '',
-        keywords: '',
+        author: [],
+        department: [],
+        keywords: [],
         postcode: '',
         email: '',
         phone: '',
-        topic: '',
-        status: ''
+        topic: ''
       },
       topics: [
         {
@@ -88,19 +100,19 @@ export default {
         },
         {
           label: '热泵、制冷空调',
-          id: '2'
-        },
-        {
-          label: '材料热物性',
           id: '3'
         },
         {
-          label: '可再生能源、脱碳、储能等',
+          label: '材料热物性',
           id: '4'
         },
         {
-          label: '热力系统动态特性、诊断与控制',
+          label: '可再生能源、脱碳、储能等',
           id: '5'
+        },
+        {
+          label: '热力系统动态特性、诊断与控制',
+          id: '6'
         }
       ]
     }
@@ -114,17 +126,47 @@ export default {
             Authorization: `Bearer ${token}`
           }
         })
-        if (res.status === 200) {
-          return { paper: res.data }
-        } else {
-          error({ statusCode: 404, message: '页面走丢了' })
+        if (res.data) {
+          const _data = res.data
+          _data.author = _data.author.split(',')
+          _data.department = _data.department.split(',')
+          _data.keywords = _data.keywords.split(',')
+          return { paper: _data }
         }
       } else {
         redirect('/login')
       }
     } catch (err) {
-      console.log(err)
-      error({ statusCode: 404, message: '页面走丢了' })
+      error({ statusCode: err.statusCode, message: err.message })
+    }
+  },
+  methods: {
+    async handleSubmit() {
+      try {
+        const data = {
+          title: this.paper.title,
+          postcode: this.paper.postcode,
+          email: this.paper.email,
+          phone: this.paper.phone,
+          topic: this.paper.topic,
+          user: this.paper.user.id,
+          pid: this.paper.pid
+        }
+        data.author = this.paper.author.join(',')
+        data.department = this.paper.department.join(',')
+        data.keywords = this.paper.keywords.join(',')
+        const res = await axios.put('/papers/' + this.paper.id, data)
+        if (res.data) {
+          this.$notification.open({
+            message: '论文编辑成功',
+            type: 'is-success',
+            position: 'is-top'
+          })
+          this.$router.push('/paper/me')
+        }
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }

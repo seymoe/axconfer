@@ -15,9 +15,21 @@
             </header>
             <div class="card-content">
               <p><b>标题：</b>{{ paper.title }}</p>
-              <p><b>作者：</b>{{ paper.author }}</p>
-              <p><b>单位：</b>{{ paper.department }}</p>
-              <p><b>关键词：</b>{{ paper.keywords }}</p>
+              <p>
+                <b>作者：</b><b-tag v-for="(item, index) in author" :key="index" style="margin-right: 12px">
+                  {{ item }}
+                </b-tag>
+              </p>
+              <p>
+                <b>单位：</b><b-tag v-for="(item, index) in department" :key="index" style="margin-right: 12px">
+                  {{ item }}
+                </b-tag>
+              </p>
+              <p>
+                <b>关键词：</b><b-tag v-for="(item, index) in keywords" :key="index" style="margin-right: 12px">
+                  {{ item }}
+                </b-tag>
+              </p>
               <p><b>邮编：</b>{{ paper.postcode }}</p>
               <p><b>电话：</b>{{ paper.phone }}</p>
               <p><b>邮箱：</b>{{ paper.email }}</p>
@@ -34,6 +46,7 @@
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 export default {
+  middleware: 'auth',
   components: {
     Sidebar
   },
@@ -53,6 +66,32 @@ export default {
       }
     }
   },
+  computed: {
+    keywords() {
+      if (this.paper && this.paper.keywords) {
+        const arr = this.paper.keywords.split(',')
+        return arr
+      } else {
+        return []
+      }
+    },
+    author() {
+      if (this.paper && this.paper.author) {
+        const arr = this.paper.author.split(',')
+        return arr
+      } else {
+        return []
+      }
+    },
+    department() {
+      if (this.paper && this.paper.department) {
+        const arr = this.paper.department.split(',')
+        return arr
+      } else {
+        return []
+      }
+    }
+  },
   async asyncData({ req, params, store, redirect, error }) {
     try {
       const token = store.state.user.token
@@ -62,18 +101,14 @@ export default {
             Authorization: `Bearer ${token}`
           }
         })
-        console.log(res)
-        if (res.status === 200) {
+        if (res.data) {
           return { paper: res.data }
-        } else {
-          error({ statusCode: 404, message: '页面走丢了' })
         }
       } else {
         redirect('/login')
       }
     } catch (err) {
-      console.log(err)
-      error({ statusCode: 404, message: '页面走丢了' })
+      error({ statusCode: err.statusCode, message: err.message })
     }
   }
 }

@@ -32,7 +32,7 @@ export default {
   },
 
   env: {
-    baseUrl: process.env.BASE_URL || 'http://api.thermophysics.cn'
+    baseUrl: process.env.BASE_URL || 'http://api2.thermophysics.cn'
   },
 
   /*

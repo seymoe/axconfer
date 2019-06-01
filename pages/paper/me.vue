@@ -20,7 +20,7 @@
                 :hoverable="true"
               >
                 <template slot-scope="props">
-                  <b-table-column field="pid" label="论文ID" width="40">
+                  <b-table-column field="pid" label="论文编号">
                     {{ props.row.pid }}
                   </b-table-column>
 
@@ -74,6 +74,7 @@ import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 
 export default {
+  middleware: 'auth',
   components: {
     Sidebar
   },
@@ -81,18 +82,11 @@ export default {
   data() {
     return {
       isEmpty: false,
-      paperColumns: [
-        { field: 'pid', label: '论文编号', width: '100' },
-        { field: 'title', label: '论文标题', width: '300' },
-        { field: 'topic', label: '领域', width: '120' },
-        { field: 'keywords', label: '关键词', width: '120' },
-        { field: 'author', label: '作者', width: '120' }
-      ],
       paperData: []
     }
   },
 
-  async asyncData({ req, store }) {
+  async asyncData({ req, store, redirect, error }) {
     try {
       const token = store.state.user.token
       const userId = store.state.user.userInfo.id
@@ -102,16 +96,15 @@ export default {
             Authorization: `Bearer ${token}`
           }
         })
-        if (res.status === 200) {
+        if (res.data) {
           return { paperData: res.data }
-        } else {
-          // 返回首页登录
         }
       } else {
-        // 返回首页登录
+        // 返回登录页
+        redirect('/login')
       }
     } catch (err) {
-      console.log(err)
+      error({ statusCode: err.statusCode, message: err.message })
     }
   }
 }

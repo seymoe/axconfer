@@ -14,7 +14,44 @@
               </p>
             </header>
             <div class="card-content">
-              <b-table :data="paperData" :columns="paperColumns" />
+              <b-table
+                :data="paperData"
+                :hoverable="true"
+              >
+                <template slot-scope="props">
+                  <b-table-column field="pid" label="论文编号">
+                    {{ props.row.paper.pid }}
+                  </b-table-column>
+
+                  <b-table-column field="title" label="论文标题">
+                    {{ props.row.paper.title }}
+                  </b-table-column>
+
+                  <b-table-column field="topic" label="评阅状态">
+                    {{ props.row.paper.status }}
+                  </b-table-column>
+
+                  <b-table-column field="action" label="操作" centered>
+                    <nuxt-link class="button is-small" :to="'/review/' + props.row.id + '/create'">
+                      评阅
+                    </nuxt-link>
+                  </b-table-column>
+                </template>
+
+                <template slot="empty">
+                  <section class="section">
+                    <div class="content has-text-grey has-text-centered">
+                      <p>
+                        <b-icon
+                          icon="emoticon-sad"
+                          size="is-large"
+                        />
+                      </p>
+                      <p>没有论文</p>
+                    </div>
+                  </section>
+                </template>
+              </b-table>
             </div>
           </div>
         </div>
@@ -27,6 +64,7 @@
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 export default {
+  middleware: 'auth',
   components: {
     Sidebar
   },
@@ -35,7 +73,7 @@ export default {
       paperColumns: [
         { field: 'paper.pid', label: '论文编号', width: '100' },
         { field: 'paper.title', label: '论文标题', width: '300' },
-        { field: 'status', label: '评阅状态', width: '120' },
+        { field: 'paper.status', label: '评阅状态', width: '120' },
         { field: '', label: '操作', width: '120' }
       ],
       paperData: []
