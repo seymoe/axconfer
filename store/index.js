@@ -65,7 +65,6 @@ export const actions = {
       resCards.data.forEach((item) => {
         obj[item.slug] = item
       })
-      console.log(obj)
       commit('setCards', obj)
     }
   }
