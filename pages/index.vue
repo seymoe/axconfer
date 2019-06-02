@@ -22,7 +22,7 @@
                 <ul class="notice-list">
                   <li v-for="item in postList" :key="item.id">
                     <b-tag>{{ item.createdAt }}</b-tag>
-                    <nuxt-link :to="'/'">
+                    <nuxt-link :to="'/posts/' + item.id">
                       {{ item.title }}
                     </nuxt-link>
                   </li>
@@ -64,6 +64,7 @@
 import Sidebar from '~/components/Sidebar.vue'
 import { mdToHtml } from '~/plugins/utils'
 import axios from '~/plugins/axios'
+import dayjs from 'dayjs'
 
 export default {
   components: {
@@ -93,6 +94,10 @@ export default {
     try {
       const res = await axios.get('/posts?_limit=10')
       if (res.data) {
+        const _l = res.data
+        _l.forEach((item) => {
+          item.createdAt = dayjs(item.createdAt).format('YYYY-MM-DD')
+        })
         return { postList: res.data }
       }
     } catch (err) {

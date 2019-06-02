@@ -14,49 +14,117 @@
               </p>
             </header>
             <div class="card-content">
-              <b-field label="论文标题">
-                <b-input v-model="paper.title" />
-              </b-field>
-              <b-field label="作者">
-                <b-taginput
-                  v-model="paper.author"
-                  icon="label"
-                  placeholder="添加作者"
-                />
-              </b-field>
-              <b-field label="单位">
-                <b-taginput
-                  v-model="paper.department"
-                  icon="label"
-                  placeholder="添加单位"
-                />
-              </b-field>
-              <b-field label="关键词">
-                <b-taginput
-                  v-model="paper.keywords"
-                  icon="label"
-                  placeholder="添加关键词"
-                />
-              </b-field>
-              <b-field label="单位邮编">
-                <b-input v-model="paper.postcode" />
-              </b-field>
-              <b-field label="联系人电话">
-                <b-input v-model="paper.phone" />
-              </b-field>
-              <b-field label="联系人邮件">
-                <b-input v-model="paper.email" />
-              </b-field>
-              <b-field label="论文主题">
-                <b-select v-model="paper.topic" placeholder="选择主题" expanded>
-                  <option v-for="topic in topics" :key="topic.id" :value="topic.label">
-                    {{ topic.label }}
-                  </option>
-                </b-select>
-              </b-field>
-              <b-field
-                label="上传论文"
-              />
+              <form>
+                <b-field
+                  label="标题"
+                  :type="{'is-danger': errors.has('paper.title')}"
+                  :message="errors.first('paper.title')"
+                >
+                  <b-input v-model="paper.title" v-validate="'required'" name="paper.title" />
+                </b-field>
+                <b-field
+                  label="作者"
+                  :type="{'is-danger': errors.has('paper.author')}"
+                  :message="errors.first('paper.author')"
+                >
+                  <b-taginput
+                    v-model="paper.author"
+                    v-validate="'required'"
+                    name="paper.author"
+                    icon="label"
+                    placeholder="添加作者"
+                  />
+                </b-field>
+                <b-field
+                  label="单位"
+                  :type="{'is-danger': errors.has('paper.department')}"
+                  :message="errors.first('paper.department')"
+                >
+                  <b-taginput
+                    v-model="paper.department"
+                    v-validate="'required'"
+                    name="paper.department"
+                    icon="label"
+                    placeholder="添加单位"
+                  />
+                </b-field>
+                <b-field
+                  label="关键词"
+                  :type="{'is-danger': errors.has('paper.keywords')}"
+                  :message="errors.first('paper.keywords')"
+                >
+                  <b-taginput
+                    v-model="paper.keywords"
+                    v-validate="'required'"
+                    name="paper.keywords"
+                    icon="label"
+                    placeholder="添加关键词"
+                  />
+                </b-field>
+
+                <b-field
+                  label="主题"
+                  :type="{'is-danger': errors.has('paper.topic')}"
+                  :message="errors.first('paper.topic')"
+                >
+                  <b-select
+                    v-model="paper.topic"
+                    v-validate="'required'"
+                    name="paper.topic"
+                    placeholder="请选择主题"
+                  >
+                    <option
+                      v-for="topic in topics"
+                      :key="topic.id"
+                      :value="topic.label"
+                    >
+                      {{ topic.label }}
+                    </option>
+                  </b-select>
+                </b-field>
+                <b-field
+                  label="邮箱Email"
+                  :type="{'is-danger': errors.has('paper.email')}"
+                  :message="errors.first('paper.email')"
+                >
+                  <b-input v-model="paper.email" v-validate="'required|email'" name="paper.email" type="email" />
+                </b-field>
+                <b-field
+                  label="邮编"
+                  :type="{'is-danger': errors.has('paper.postcode')}"
+                  :message="errors.first('paper.postcode')"
+                >
+                  <b-input v-model="paper.postcode" v-validate="{required: true, regex: /\d{6}/}" name="paper.postcode" />
+                </b-field>
+                <b-field
+                  label="电话"
+                  :type="{'is-danger': errors.has('paper.phone')}"
+                  :message="errors.first('paper.phone')"
+                >
+                  <b-input v-model="paper.phone" v-validate="{required: 'paper.phone', regex: /^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$/}" name="paper.phone" />
+                </b-field>
+                <b-field
+                  label="上传论文"
+                  :type="{'is-danger': errors.has('file')}"
+                  :message="errors.first('file')"
+                >
+                  <div>
+                    <b-upload
+                      v-model="file"
+                      v-validate="'required'"
+                      name="file"
+                    >
+                      <a class="button is-light">
+                        <b-icon icon="upload" />
+                        <span>Click to upload</span>
+                      </a>
+                    </b-upload>
+                    <span v-if="file" class="file-name">
+                      {{ file.name }}
+                    </span>
+                  </div>
+                </b-field>
+              </form>
               <b-button type="is-primary" @click="handleSubmit">
                 提交
               </b-button>
@@ -71,6 +139,42 @@
 <script>
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
+
+const valiDict = {
+  custom: {
+    'paper.title': {
+      required: '请输入论文标题'
+    },
+    'paper.author': {
+      required: '请输入作者，按回车键确认'
+    },
+    'paper.department': {
+      required: '请输入部门，按回车键确认'
+    },
+    'paper.keywords': {
+      required: '请输入关键词，按回车键确认'
+    },
+    'paper.topic': {
+      required: '请选择主题'
+    },
+    'paper.email': {
+      required: '请输入邮箱',
+      email: '邮箱格式不正确'
+    },
+    'paper.postcode': {
+      required: '请输入邮编',
+      regex: '邮编格式不正确'
+    },
+    'paper.phone': {
+      required: '请输入电话号码',
+      regex: '格式不正确'
+    },
+    'file': {
+      required: '请选择论文上传'
+    }
+  }
+}
+
 export default {
   middleware: 'auth',
   components: {
@@ -140,6 +244,9 @@ export default {
       error({ statusCode: err.statusCode, message: err.message })
     }
   },
+  created() {
+    this.$validator.localize('zh_CN', valiDict)
+  },
   methods: {
     async handleSubmit() {
       try {
@@ -155,7 +262,16 @@ export default {
         data.author = this.paper.author.join(',')
         data.department = this.paper.department.join(',')
         data.keywords = this.paper.keywords.join(',')
-        const res = await axios.put('/papers/' + this.paper.id, data)
+
+        const formData = new FormData()
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            formData.append(key, data[key])
+          }
+        }
+        formData.append('file', this.file)
+
+        const res = await axios.put('/papers/' + this.paper.id, formData)
         if (res.data) {
           this.$notification.open({
             message: '论文编辑成功',

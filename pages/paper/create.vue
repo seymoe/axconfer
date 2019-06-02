@@ -262,7 +262,6 @@ export default {
         data.author = data.author.join(',')
         data.department = data.department.join(',')
         data.keywords = data.keywords.join(',')
-        data.file = this.file
         // pid
         if (this.pid) {
           data.pid = this.pid
@@ -271,7 +270,16 @@ export default {
         }
         // user
         data.user = this.userInfo.id
-        const res = await axios.post('/papers', data)
+
+        const formData = new FormData()
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            formData.append(key, data[key])
+          }
+        }
+        formData.append('file', this.file)
+
+        const res = await axios.post('/papers', formData)
         if (res.data) {
           this.$notification.open({
             message: '论文创建成功',

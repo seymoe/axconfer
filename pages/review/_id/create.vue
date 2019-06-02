@@ -33,8 +33,13 @@
               <b-field horizontal label="主题：">
                 <p>{{ review.paper.topic }}</p>
               </b-field>
-              <b-field horizontal label="展示方式：">
-                <b-select v-model="form.presentation" placeholder="请选择">
+              <b-field
+                horizontal
+                label="展示方式："
+                :type="{'is-danger': errors.has('form.presentation')}"
+                :message="errors.first('form.presentation')"
+              >
+                <b-select v-model="form.presentation" v-validate="'required'" name="form.presentation" placeholder="请选择">
                   <option value="口头">
                     口头
                   </option>
@@ -46,8 +51,13 @@
                   </option>
                 </b-select>
               </b-field>
-              <b-field horizontal label="推荐优秀：">
-                <b-select v-model="form.level" placeholder="请选择">
+              <b-field
+                horizontal
+                label="推荐优秀："
+                :type="{'is-danger': errors.has('form.level')}"
+                :message="errors.first('form.level')"
+              >
+                <b-select v-model="form.level" v-validate="'required'" name="form.level" placeholder="请选择">
                   <option value="普通">
                     普通
                   </option>
@@ -59,8 +69,13 @@
                   </option>
                 </b-select>
               </b-field>
-              <b-field horizontal label="评阅意见：">
-                <b-input v-model="form.content" type="textarea" />
+              <b-field
+                horizontal
+                label="评阅意见："
+                :type="{'is-danger': errors.has('form.content')}"
+                :message="errors.first('form.content')"
+              >
+                <b-input v-model="form.content" v-validate="'required'" name="form.content" type="textarea" />
               </b-field>
               <b-field horizontal>
                 <p class="control">
@@ -80,6 +95,20 @@
 <script>
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
+
+const valiDict = {
+  custom: {
+    'form.presentation': {
+      required: '请选择展示方式'
+    },
+    'form.level': {
+      required: '请选择评级'
+    },
+    'form.content': {
+      required: '请输入评阅内容'
+    }
+  }
+}
 export default {
   components: {
     Sidebar
@@ -137,6 +166,9 @@ export default {
       console.log(err)
       error({ statusCode: err.statusCode, message: err.message })
     }
+  },
+  created() {
+    this.$validator.localize('zh_CN', valiDict)
   },
   methods: {
     async handleSubmit() {
