@@ -2,7 +2,7 @@
   <div>
     <section class="hero is-light is-fullheight">
       <div class="hero-head">
-        <Header theme="dark" />
+        <Header />
       </div>
       <div class="hero-body">
         <nuxt />
@@ -23,6 +23,6 @@ export default {
 
 <style scoped>
 .hero.is-light{
-  /* background-color: #212121; */
+  background-color: #212121;
 }
 </style>
