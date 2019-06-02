@@ -150,9 +150,9 @@ export default {
     async handleAssign() {
       try {
         const data = {
-          content: '空',
-          presentation: '墙报',
-          level: '普通',
+          // content: '空',
+          // presentation: '墙报',
+          // level: '普通',
           paper: this.checkedPapers[0].id,
           user: this.checkedProfs[0].id
         }
