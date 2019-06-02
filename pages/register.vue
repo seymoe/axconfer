@@ -8,21 +8,37 @@
         请根据提示进行注册
       </p>
       <div class="box">
-        <b-field>
-          <b-input v-model="form.email" placeholder="请输入邮箱" type="email" />
+        <b-field
+          :type="{'is-danger': errors.has('form.email')}"
+          :message="errors.first('form.email')"
+        >
+          <b-input v-model="form.email" v-validate="'required|email'" name="form.email" placeholder="请输入邮箱" type="email" />
         </b-field>
-        <b-field>
-          <b-input v-model="form.username" placeholder="请输入用户名" />
+        <b-field
+          :type="{'is-danger': errors.has('form.username')}"
+          :message="errors.first('form.username')"
+        >
+          <b-input
+            v-model="form.username"
+            v-validate="'required'"
+            name="form.username"
+            placeholder="请输入用户名"
+          />
         </b-field>
-        <b-field>
+        <b-field
+          :type="{'is-danger': errors.has('form.password')}"
+          :message="errors.first('form.password')"
+        >
           <b-input
             v-model="form.password"
+            v-validate="'required'"
+            name="form.password"
             type="password"
             placeholder="请输入密码"
             password-reveal
           />
         </b-field>
-        <button class="button is-block is-info is-fullwidth" @click="handleRegist">
+        <button class="button is-block is-info is-fullwidth" @click="validateFields">
           注册
         </button>
       </div>
@@ -38,6 +54,20 @@
 <script>
 import axios from '~/plugins/axios'
 const Cookie = process.client ? require('js-cookie') : undefined
+const valiDict = {
+  custom: {
+    'form.username': {
+      required: '请输入用户名'
+    },
+    'form.email': {
+      required: '请输入邮箱',
+      email: '邮箱格式不正确'
+    },
+    'form.password': {
+      required: '请输入密码'
+    }
+  }
+}
 
 export default {
   layout: 'inhero',
@@ -51,7 +81,17 @@ export default {
       isSubmiting: false
     }
   },
+  created() {
+    this.$validator.localize('zh_CN', valiDict)
+  },
   methods: {
+    validateFields() {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          this.handleRegist()
+        }
+      })
+    },
     // TODO: fetchUserInfo Vuex的action中
     async fetchUserInfo(token) {
       try {
@@ -69,15 +109,6 @@ export default {
     async handleRegist() {
       try {
         const { username, email, password } = this.form
-        if (!email) {
-          return false
-        }
-        if (!username) {
-          return false
-        }
-        if (!password) {
-          return false
-        }
         this.isSubmiting = true
         const res = await axios.post('/auth/local/register', {
           username,

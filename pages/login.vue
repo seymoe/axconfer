@@ -12,19 +12,29 @@
           <img src="https://placehold.it/128x128">
         </figure>
         <form>
-          <div class="field">
-            <div class="control">
-              <input v-model="form.identifier" class="input" type="email" placeholder="Your Email" autofocus="">
-            </div>
-          </div>
-          <div class="field">
-            <div class="control">
-              <input v-model="form.password" class="input" type="password" placeholder="Your Password">
-            </div>
-          </div>
-          <button :disabled="isSubmiting" class="button is-block is-info is-fullwidth" @click="handleLogin">
-            登录
-          </button>
+          <b-field
+            :type="{'is-danger': errors.has('form.identifier')}"
+            :message="errors.first('form.identifier')"
+          >
+            <b-input v-model="form.identifier" v-validate="'required|email'" name="form.identifier" type="email" />
+          </b-field>
+          <b-field
+            :type="{'is-danger': errors.has('form.password')}"
+            :message="errors.first('form.password')"
+          >
+            <b-input
+              v-model="form.password"
+              v-validate="'required'"
+              name="form.password"
+              type="password"
+              password-reveal
+            />
+          </b-field>
+          <b-field>
+            <b-button :disabled="isSubmiting" type="is-primary is-fullwidth" @click="validateFields">
+              登录
+            </b-button>
+          </b-field>
         </form>
       </div>
       <p class="has-text-grey">
@@ -39,7 +49,17 @@
 <script>
 import axios from '~/plugins/axios'
 const Cookie = process.client ? require('js-cookie') : undefined
-
+const valiDict = {
+  custom: {
+    'form.identifier': {
+      required: '请输入邮箱',
+      email: '邮箱格式不正确'
+    },
+    'form.password': {
+      required: '请输入密码'
+    }
+  }
+}
 export default {
   layout: 'inhero',
   data() {
@@ -51,16 +71,20 @@ export default {
       isSubmiting: false
     }
   },
+  created() {
+    this.$validator.localize('zh_CN', valiDict)
+  },
   methods: {
+    validateFields() {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          this.handleLogin()
+        }
+      })
+    },
     async handleLogin() {
       try {
         const { identifier, password } = this.form
-        if (!identifier) {
-          return false
-        }
-        if (!password) {
-          return false
-        }
         this.isSubmiting = true
         const res = await axios.post('/auth/local', {
           identifier,

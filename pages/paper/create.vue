@@ -249,9 +249,7 @@ export default {
   },
   methods: {
     validateFields() {
-      console.log(this.$validator)
       this.$validator.validateAll().then((result) => {
-        console.log(result)
         if (result) {
           this.handleSubmit()
         }

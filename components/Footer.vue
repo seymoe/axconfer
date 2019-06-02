@@ -67,6 +67,7 @@ export default {
 .title.is-5{
   padding-bottom: 14px;
   border-bottom: 1px solid #fff;
+  color: #bfbfbf;
 }
 .title.is-6{
   margin-bottom: 6px;

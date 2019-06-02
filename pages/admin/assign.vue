@@ -95,9 +95,6 @@ export default {
     }
   },
   computed: {
-    // paperFilterData() {
-    //   return this.paperData.filter(paper => paper.status === '未评阅')
-    // },
     profFiltrData() {
       return this.profData.filter(prof => prof.role.name === 'Professor')
     }
