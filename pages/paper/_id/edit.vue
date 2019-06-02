@@ -105,22 +105,22 @@
                 </b-field>
                 <b-field
                   label="上传论文"
-                  :type="{'is-danger': errors.has('file')}"
-                  :message="errors.first('file')"
+                  :type="{'is-danger': errors.has('paper.file')}"
+                  :message="errors.first('paper.file')"
                 >
                   <div>
                     <b-upload
-                      v-model="file"
+                      v-model="paper.file"
                       v-validate="'required'"
-                      name="file"
+                      name="paper.file"
                     >
                       <a class="button is-light">
                         <b-icon icon="upload" />
                         <span>Click to upload</span>
                       </a>
                     </b-upload>
-                    <span v-if="file" class="file-name">
-                      {{ file.name }}
+                    <span v-if="paper.file" class="file-name">
+                      {{ paper.file.name }}
                     </span>
                   </div>
                 </b-field>
@@ -169,7 +169,7 @@ const valiDict = {
       required: '请输入电话号码',
       regex: '格式不正确'
     },
-    'file': {
+    'paper.file': {
       required: '请选择论文上传'
     }
   }
@@ -177,6 +177,7 @@ const valiDict = {
 
 export default {
   middleware: 'auth',
+  layout: 'nohero',
   components: {
     Sidebar
   },
@@ -191,7 +192,8 @@ export default {
         postcode: '',
         email: '',
         phone: '',
-        topic: ''
+        topic: '',
+        file: null
       },
       topics: [
         {
@@ -257,7 +259,8 @@ export default {
           phone: this.paper.phone,
           topic: this.paper.topic,
           user: this.paper.user.id,
-          pid: this.paper.pid
+          pid: this.paper.pid,
+          file: this.paper.file
         }
         data.author = this.paper.author.join(',')
         data.department = this.paper.department.join(',')
@@ -269,7 +272,6 @@ export default {
             formData.append(key, data[key])
           }
         }
-        formData.append('file', this.file)
 
         const res = await axios.put('/papers/' + this.paper.id, formData)
         if (res.data) {

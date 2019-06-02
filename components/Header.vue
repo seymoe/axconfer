@@ -1,8 +1,8 @@
 <template>
-  <nav class="navbar top-header">
+  <nav :class="'navbar top-header' + (theme === 'light' ? ' theme-light' : ' theme-dark')">
     <div class="container">
       <div class="navbar-brand">
-        <a class="navbar-item" href="/">
+        <a class="navbar-item logo" href="/">
           <!-- <img src="http://bulma.io/images/bulma-type-white.png" alt="Logo"> -->
           工程热物理
         </a>
@@ -35,29 +35,41 @@
           <template v-if="token && userInfo.role">
             <!-- auth -->
             <b-dropdown hoverable aria-role="list">
-              <a slot="trigger" class="navbar-item" role="button">
+              <span slot="trigger" class="navbar-item dropdown-label" role="button">
                 <b-icon icon="account" />
                 <span>{{ userInfo.username }}</span>
                 <b-icon icon="menu-down" />
-              </a>
-              <b-dropdown-item v-if="userInfo.role.name === 'Authenticated'" aria-role="listitem">
-                <b-icon icon="file" size="is-small" />
-                <nuxt-link to="/paper/me">
-                  我的论文
-                </nuxt-link>
-              </b-dropdown-item>
-              <b-dropdown-item v-else-if="userInfo.role.name === 'Professor'" aria-role="listitem">
-                <b-icon icon="file-find" size="is-small" />
-                <nuxt-link to="/review/me">
-                  审阅论文
-                </nuxt-link>
-              </b-dropdown-item>
-              <b-dropdown-item v-else-if="userInfo.role.name === 'Administrator'" aria-role="listitem">
-                <b-icon icon="animation" size="is-small" />
-                <nuxt-link to="/admin/assign">
-                  管理论文
-                </nuxt-link>
-              </b-dropdown-item>
+              </span>
+              <template v-if="userInfo.role.name === 'Authenticated'">
+                <b-dropdown-item aria-role="listitem">
+                  <b-icon icon="file" size="is-small" />
+                  <nuxt-link to="/paper/me">
+                    我的论文
+                  </nuxt-link>
+                </b-dropdown-item>
+              </template>
+              <template v-else-if="userInfo.role.name === 'Professor'">
+                <b-dropdown-item aria-role="listitem">
+                  <b-icon icon="file-find" size="is-small" />
+                  <nuxt-link to="/review/me">
+                    审阅论文
+                  </nuxt-link>
+                </b-dropdown-item>
+              </template>
+              <template v-else-if="userInfo.role.name === 'Administrator'">
+                <b-dropdown-item aria-role="listitem">
+                  <b-icon icon="animation" size="is-small" />
+                  <nuxt-link to="/admin/assign">
+                    管理论文
+                  </nuxt-link>
+                </b-dropdown-item>
+                <b-dropdown-item aria-role="listitem">
+                  <b-icon icon="view-dashboard" size="is-small" />
+                  <nuxt-link to="/admin/send-email">
+                    群发邮件
+                  </nuxt-link>
+                </b-dropdown-item>
+              </template>
               <b-dropdown-item aria-role="listitem" @click="handleLogout">
                 <b-icon icon="logout" size="is-small" />
                 退出登录
@@ -95,6 +107,12 @@ import { mapGetters } from 'vuex'
 const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
+  props: {
+    theme: {
+      type: String,
+      default: 'light'
+    }
+  },
   data() {
     return {}
   },
@@ -121,16 +139,24 @@ export default {
 </script>
 
 <style scoped>
-.top-header{
+.theme-light{
   background-color: rgba(255,255,255,0.05);
-  color: #fff;
+}
+.theme-dark{
+  background-color: #333;
+}
+.top-header{
   font-weight: bold;
 }
-.hero.is-light a.navbar-item:hover{
-  background: transparent;
+.logo, .dropdown-label{
+  color: #fff !important;
 }
 .navbar-end a.navbar-item{
   transition: all .3s;
+  color: #fff;
+}
+.hero.is-light a.navbar-item:hover{
+  background: transparent;
 }
 .navbar-end a.navbar-item:hover{
   background-color: transparent;

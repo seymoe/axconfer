@@ -178,6 +178,7 @@ const valiDict = {
 
 export default {
   middleware: 'auth',
+  layout: 'nohero',
   components: {
     Sidebar
   },
@@ -270,6 +271,8 @@ export default {
         }
         // user
         data.user = this.userInfo.id
+        // year
+        data.year = this.currentYear
 
         const formData = new FormData()
         for (const key in data) {

@@ -39,6 +39,7 @@ export default {
   ** Global CSS
   */
   css: [
+    '~/assets/custom.scss'
   ],
 
   /*
@@ -89,7 +90,6 @@ export default {
           exclude: /(node_modules)/
         })
       }
-    },
-    transpile: ['vue-notifications']
+    }
   }
 }

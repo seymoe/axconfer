@@ -2,7 +2,7 @@
   <div>
     <section class="hero is-light is-medium">
       <div class="hero-head">
-        <Header />
+        <Header theme="light" />
       </div>
       <div class="hero-body">
         <div class="container has-text-centered">

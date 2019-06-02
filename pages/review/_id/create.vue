@@ -110,6 +110,7 @@ const valiDict = {
   }
 }
 export default {
+  layout: 'nohero',
   components: {
     Sidebar
   },

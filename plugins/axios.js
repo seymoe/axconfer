@@ -10,7 +10,6 @@ instance.interceptors.request.use((config) => {
   if (process.client) {
     token = Cookie.get('token')
   }
-  console.log(token)
   token && (config.headers.Authorization = 'Bearer ' + token)
   return config
 },

@@ -47,6 +47,7 @@ import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 export default {
   middleware: 'auth',
+  layout: 'nohero',
   components: {
     Sidebar
   },

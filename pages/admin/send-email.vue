@@ -30,7 +30,7 @@
             <b-input v-model="content" v-validate="'required'" name="content" type="textarea" />
           </b-field>
         </form>
-        <button class="button" @click="handleSendMail">
+        <button class="button btn-send is-primary" @click="handleSendMail">
           发送
         </button>
       </div>
@@ -116,3 +116,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.btn-send{
+  margin-top: 14px;
+}
+</style>
