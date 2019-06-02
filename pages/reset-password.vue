@@ -42,18 +42,35 @@ export default {
   data() {
     return {
       form: {
-        code: '',
         password: '',
         passwordConfirmation: ''
       },
       isSubmiting: false
     }
   },
+  asyncData({ query, redirect, error }) {
+    try {
+      const _code = query.code
+      if (_code) {
+        return {
+          code: _code
+        }
+      } else {
+        return {
+          code: ''
+        }
+      }
+    } catch (err) {
+      return {
+        code: ''
+      }
+    }
+  },
   methods: {
     async handleLogin() {
       try {
-        const { code, password, passwordConfirmation } = this.form
-        if (!code) {
+        const { password, passwordConfirmation } = this.form
+        if (!this.code) {
           return false
         }
         if (!password) {
@@ -64,35 +81,30 @@ export default {
         }
         this.isSubmiting = true
         const res = await axios.post('/auth/reset-password', {
-          code,
+          code: this.code,
           password,
           passwordConfirmation
         }, {
           headers: {}
         })
         console.log(res)
-        if (res.status === 200) {
-          this.$notification.open({
-            message: '密码重置成功，请重新登录！',
-            type: 'is-success',
-            position: 'is-top'
-          })
-          this.$router.push('/')
-        } else {
-          this.$notification.open({
-            message: '密码重置失败，请重试',
-            type: 'is-warning',
-            position: 'is-top'
-          })
+        this.$notification.open({
+          message: '密码重置成功，请重新登录！',
+          type: 'is-success',
+          position: 'is-top'
+        })
+        setTimeout(() => {
           this.$router.push('/login')
-        }
+        }, 1000)
       } catch (err) {
         this.$notification.open({
-          message: '密码重置失败，请重试',
+          message: err.message || '密码重置失败，请重试',
           type: 'is-warning',
           position: 'is-top'
         })
-        this.$router.push('/login')
+        setTimeout(() => {
+          this.$router.push('/forgot-password')
+        }, 1000)
       }
     }
   }

@@ -28,7 +28,7 @@
       </div>
       <p class="has-text-grey">
         <a href="/login">登录</a> &nbsp;·&nbsp;
-        <a href="/">忘记密码</a> &nbsp;·&nbsp;
+        <a href="/forgot-password">忘记密码</a> &nbsp;·&nbsp;
         <a href="/">需要帮助？</a>
       </p>
     </div>

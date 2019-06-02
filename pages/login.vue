@@ -45,8 +45,8 @@ export default {
   data() {
     return {
       form: {
-        identifier: 'user01@163.com',
-        password: 'user01'
+        identifier: '',
+        password: ''
       },
       isSubmiting: false
     }

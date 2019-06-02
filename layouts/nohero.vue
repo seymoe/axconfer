@@ -2,7 +2,7 @@
   <div>
     <section class="hero is-light">
       <div class="hero-head">
-        <Header />
+        <Header theme="dark" />
       </div>
     </section>
     <section class="section">

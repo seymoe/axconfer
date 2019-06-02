@@ -32,20 +32,22 @@ export default {
   },
 
   env: {
-    baseUrl: process.env.BASE_URL || 'http://api.thermophysics.cn'
+    baseUrl: process.env.BASE_URL || 'http://api2.thermophysics.cn'
   },
 
   /*
   ** Global CSS
   */
   css: [
+    '~/assets/custom.scss'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/axios.js' }
+    { src: '~/plugins/axios.js' },
+    { src: '~/plugins/vee-validate.js' }
   ],
 
   /*
@@ -88,7 +90,6 @@ export default {
           exclude: /(node_modules)/
         })
       }
-    },
-    transpile: ['vue-notifications']
+    }
   }
 }
