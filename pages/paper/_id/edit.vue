@@ -125,7 +125,7 @@
                   </div>
                 </b-field>
               </form>
-              <b-button type="is-primary" @click="handleSubmit">
+              <b-button type="is-primary" @click="validateFields">
                 提交
               </b-button>
             </div>
@@ -250,6 +250,13 @@ export default {
     this.$validator.localize('zh_CN', valiDict)
   },
   methods: {
+    validateFields() {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          this.handleSubmit()
+        }
+      })
+    },
     async handleSubmit() {
       try {
         const data = {

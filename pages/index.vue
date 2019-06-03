@@ -21,7 +21,9 @@
               <div class="content">
                 <ul class="notice-list">
                   <li v-for="item in postList" :key="item.id">
-                    <b-tag>{{ item.createdAt }}</b-tag>
+                    <b-tag class="is-info">
+                      {{ item.createdAt }}
+                    </b-tag>
                     <nuxt-link :to="'/posts/' + item.id">
                       {{ item.title }}
                     </nuxt-link>
@@ -107,8 +109,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .notice-list{
   margin-top: 0;
+  margin-left: 0;
+  list-style: none;
+  li{
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tag{
+    margin-right: 10px;
+  }
 }
 </style>

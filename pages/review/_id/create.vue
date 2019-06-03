@@ -79,7 +79,7 @@
               </b-field>
               <b-field horizontal>
                 <p class="control">
-                  <button class="button is-primary" @click="handleSubmit">
+                  <button class="button is-primary" @click="validateFields">
                     保存
                   </button>
                 </p>
@@ -172,6 +172,13 @@ export default {
     this.$validator.localize('zh_CN', valiDict)
   },
   methods: {
+    validateFields() {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          this.handleSubmit()
+        }
+      })
+    },
     async handleSubmit() {
       try {
         const res = await axios.put('/reviews/' + this.review.id, this.form)

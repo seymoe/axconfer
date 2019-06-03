@@ -2,3 +2,11 @@
 
 $primary: red;
 $link: blue;
+
+// 组件公共样式
+.section{
+  padding: 1rem;
+}
+.card{
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.03), 0 0 0 1px rgba(10, 10, 10, 0.03);
+}

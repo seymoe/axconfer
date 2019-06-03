@@ -41,33 +41,25 @@
                 <b-icon icon="menu-down" />
               </span>
               <template v-if="userInfo.role.name === 'Authenticated'">
-                <b-dropdown-item aria-role="listitem">
+                <b-dropdown-item aria-role="listitem" @click="$router.push('/paper/me')">
                   <b-icon icon="file" size="is-small" />
-                  <nuxt-link to="/paper/me">
-                    我的论文
-                  </nuxt-link>
+                  我的论文
                 </b-dropdown-item>
               </template>
               <template v-else-if="userInfo.role.name === 'Professor'">
-                <b-dropdown-item aria-role="listitem">
+                <b-dropdown-item aria-role="listitem" @click="$router.push('/review/me')">
                   <b-icon icon="file-find" size="is-small" />
-                  <nuxt-link to="/review/me">
-                    审阅论文
-                  </nuxt-link>
+                  审阅论文
                 </b-dropdown-item>
               </template>
               <template v-else-if="userInfo.role.name === 'Administrator'">
-                <b-dropdown-item aria-role="listitem">
+                <b-dropdown-item aria-role="listitem" @click="$router.push('/admin/assign')">
                   <b-icon icon="animation" size="is-small" />
-                  <nuxt-link to="/admin/assign">
-                    管理论文
-                  </nuxt-link>
+                  管理论文
                 </b-dropdown-item>
-                <b-dropdown-item aria-role="listitem">
+                <b-dropdown-item aria-role="listitem" @click="$router.push('/admin/send-email')">
                   <b-icon icon="view-dashboard" size="is-small" />
-                  <nuxt-link to="/admin/send-email">
-                    群发邮件
-                  </nuxt-link>
+                  群发邮件
                 </b-dropdown-item>
               </template>
               <b-dropdown-item aria-role="listitem" @click="handleLogout">
