@@ -10,6 +10,7 @@ instance.interceptors.request.use((config) => {
   if (process.client) {
     token = Cookie.get('token')
   }
+  console.log('use token ', token)
   token && (config.headers.Authorization = 'Bearer ' + token)
   return config
 },
@@ -23,6 +24,7 @@ instance.interceptors.response.use((response) => {
   if (error.response.status) {
     switch (error.response.status) {
       case 401:
+        console.log('401了')
         break
       default:
         break

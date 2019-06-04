@@ -77,6 +77,7 @@ export default {
         { field: 'pid', label: '论文编号', width: '100' },
         { field: 'title', label: '论文标题', width: '300' },
         { field: 'topic', label: '领域', width: '120' },
+        { field: 'status', label: '状态', width: '120' },
         { field: 'keywords', label: '关键词', width: '120' },
         { field: 'author', label: '作者', width: '120' }
       ],
@@ -113,8 +114,8 @@ export default {
   async asyncData({ req, store, redirect, error }) {
     try {
       const user = store.state.user
-      const userId = store.state.user.userInfo.id
-      if (user.token && userId && user.userInfo.role.name === 'Administrator') {
+      const userId = store.state.user.userInfo._id
+      if (user.token && userId) {
         const returnData = {}
         const res = await axios.get('/papers', {
           headers: {
@@ -146,21 +147,23 @@ export default {
   methods: {
     async handleAssign() {
       try {
-        const data = {
-          // content: '空',
-          // presentation: '墙报',
-          // level: '普通',
-          paper: this.checkedPapers[0].id,
-          user: this.checkedProfs[0].id
+        // 循环发送请求
+        for (let i = 0; i < this.checkedPapers.length; i++) {
+          const paperId = this.checkedPapers[i]._id
+          for (let j = 0; j < this.checkedProfs.length; j++) {
+            const profId = this.checkedProfs[j]._id
+            const data = { paper: paperId, user: profId }
+            await axios.post('/reviews', data)
+          }
+          // 分配评阅后论文状态是评阅中
+          await axios.put('/papers/id', { status: '评阅中' })
         }
-        const res = await axios.post('/reviews', data)
-        if (res.data) {
-          this.$notification.open({
-            message: '分配成功',
-            type: 'is-success',
-            position: 'is-top'
-          })
-        }
+
+        this.$notification.open({
+          message: '分配成功',
+          type: 'is-success',
+          position: 'is-top'
+        })
         this.checkedPapers = []
         this.checkedProfs = []
         this.fetchPaperList()
