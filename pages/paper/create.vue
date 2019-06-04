@@ -140,6 +140,7 @@
 <script>
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
+import { mapGetters } from 'vuex'
 
 const valiDict = {
   custom: {
@@ -228,6 +229,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      headerAuth: 'getAuthHeader'
+    }),
     currentYear() {
       if (this.$store.state.conference.length) {
         const obj = this.$store.state.conference[0]
@@ -274,11 +278,10 @@ export default {
         // year
         data.year = this.currentYear
 
-        const res = await axios.post('/papers', data)
+        const res = await axios.post('/papers', data, this.headerAuth)
         console.log(res)
         if (res.data && res.data._id) {
           this.paperRes = res.data
-
           this.uploadDoc()
         }
       } catch (err) {
@@ -288,7 +291,7 @@ export default {
     async getPidNumber() {
       if (!this.currentYear) return false
       try {
-        const res = await axios.get('/papers/count?year=' + this.currentYear)
+        const res = await axios.get('/papers/count?year=' + this.currentYear, this.headerAuth)
         if (this.currentYear && res.data) {
           const year = this.currentYear.slice(this.currentYear.length - 2)
           const num = +res.data
@@ -303,12 +306,13 @@ export default {
     async uploadDoc() {
       try {
         const formData = new FormData()
-        formData.append('file', this.file)
-        formData.append('path', 'papers')
+        formData.append('files', this.file)
         formData.append('refId', this.paperRes._id)
         formData.append('ref', 'paper')
         formData.append('field', 'file')
-        const res = await axios.post('/upload', formData)
+        const res = await axios.post('/upload', formData, Object.assign(this.headerAuth, {
+          'Content-Type': 'multipart/form-data'
+        }))
         console.log(res)
         if (res.data) {
           this.$notification.open({
@@ -316,7 +320,7 @@ export default {
             type: 'is-success',
             position: 'is-top'
           })
-          // this.$router.push('/paper/me')
+          this.$router.push('/paper/me')
         }
       } catch (err) {
         console.log(err)

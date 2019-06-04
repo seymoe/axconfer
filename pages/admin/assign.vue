@@ -19,14 +19,13 @@
           :checked-rows.sync="checkedPapers"
           checkable
         >
-          <template slot="bottom-left">
+          <!-- <template slot="bottom-left">
             <b>Total checked</b>: {{ checkedPapers.length }}
-          </template>
+          </template> -->
         </b-table>
       </div>
 
       <div class="column is-3">
-        默认只选择1个教授
         <b-table
           :data="profFiltrData"
           :columns="profColumns"
@@ -37,7 +36,7 @@
             <b>Total checked</b>: {{ checkedProfs.length }}
           </template>
         </b-table>
-        <button class="button" @click="handleAssign">
+        <button class="button is-primary" @click="handleAssign">
           分配论文至教授
         </button>
       </div>
@@ -47,6 +46,7 @@
 
 <script>
 import axios from '~/plugins/axios'
+import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
@@ -96,6 +96,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      headerAuth: 'getAuthHeader'
+    }),
     profFiltrData() {
       return this.profData.filter(prof => prof.role.name === 'Professor')
     }
@@ -103,6 +106,8 @@ export default {
   watch: {
     currentStatus(newVal, oldVal) {
       console.log(newVal, oldVal)
+      this.checkedPapers = []
+      this.checkedProfs = []
       if (newVal === this.statusArr[0].value) {
         this.paperFilterData = this.paperData
       } else {
@@ -117,22 +122,14 @@ export default {
       const userId = store.state.user.userInfo._id
       if (user.token && userId) {
         const returnData = {}
-        const res = await axios.get('/papers', {
-          headers: {
-            Authorization: `Bearer ${user.token}`
-          }
-        })
+        const res = await axios.get('/papers', store.getters.getAuthHeader)
         if (res.data) {
           returnData.paperData = res.data
           returnData.paperFilterData = res.data
         }
 
         // 拉取教授列表
-        const profRes = await axios.get('/users', {
-          headers: {
-            Authorization: `Bearer ${user.token}`
-          }
-        })
+        const profRes = await axios.get('/users', store.getters.getAuthHeader)
         if (profRes.data) {
           returnData.profData = profRes.data
         }
@@ -147,16 +144,32 @@ export default {
   methods: {
     async handleAssign() {
       try {
+        if (this.checkedPapers.length <= 0) {
+          this.$notification.open({
+            message: '请先选择论文',
+            type: 'is-info',
+            position: 'is-top'
+          })
+          return false
+        }
+        if (this.checkedProfs.length <= 0) {
+          this.$notification.open({
+            message: '请先选择教授',
+            type: 'is-info',
+            position: 'is-top'
+          })
+          return false
+        }
         // 循环发送请求
         for (let i = 0; i < this.checkedPapers.length; i++) {
           const paperId = this.checkedPapers[i]._id
           for (let j = 0; j < this.checkedProfs.length; j++) {
             const profId = this.checkedProfs[j]._id
             const data = { paper: paperId, user: profId }
-            await axios.post('/reviews', data)
+            await axios.post('/reviews', data, this.headerAuth)
           }
           // 分配评阅后论文状态是评阅中
-          await axios.put('/papers/id', { status: '评阅中' })
+          await axios.put('/papers/' + paperId, { status: '评阅中' }, this.headerAuth)
         }
 
         this.$notification.open({
@@ -174,9 +187,10 @@ export default {
     // 客户端拉取paper列表
     async fetchPaperList() {
       try {
-        const res = await axios.get('/papers')
+        const res = await axios.get('/papers', this.headerAuth)
         if (res.data) {
           this.paperData = res.data
+          this.currentStatus = '全部'
         }
       } catch (err) {
         console.log(err)

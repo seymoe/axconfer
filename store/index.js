@@ -4,7 +4,8 @@ const cookieparser = process.server ? require('cookieparser') : undefined
 
 export const state = () => ({
   conference: [],
-  cards: {}
+  cards: {},
+  headerAuth: {}
 })
 
 export const mutations = {
@@ -34,6 +35,15 @@ export const getters = {
   },
   getFootPartner(state) {
     return state.cards['footer-partner'] || {}
+  },
+
+  // 获取token auth header
+  getAuthHeader(state) {
+    return state.user.token ? {
+      headers: {
+        Authorization: `Bearer ${state.user.token}`
+      }
+    } : {}
   }
 }
 
@@ -52,8 +62,6 @@ export const actions = {
     }
     commit('user/setToken', token)
     commit('user/setUserInfo', userInfo)
-
-    // console.log(token)
 
     // 顶部会议数据
     const resConfer = await axios.get('/conferences?_limit=1')
