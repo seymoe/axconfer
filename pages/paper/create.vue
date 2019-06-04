@@ -222,7 +222,9 @@ export default {
         user: ''
       },
       file: null,
-      pid: ''
+      pid: '',
+
+      paperRes: {}
     }
   },
   computed: {
@@ -272,22 +274,12 @@ export default {
         // year
         data.year = this.currentYear
 
-        const formData = new FormData()
-        for (const key in data) {
-          if (data.hasOwnProperty(key)) {
-            formData.append(key, data[key])
-          }
-        }
-        formData.append('file', this.file)
+        const res = await axios.post('/papers', data)
+        console.log(res)
+        if (res.data && res.data._id) {
+          this.paperRes = res.data
 
-        const res = await axios.post('/papers', formData)
-        if (res.data) {
-          this.$notification.open({
-            message: '论文创建成功',
-            type: 'is-success',
-            position: 'is-top'
-          })
-          this.$router.push('/paper/me')
+          this.uploadDoc()
         }
       } catch (err) {
         console.log(err)
@@ -303,6 +295,28 @@ export default {
           this.pid = `${year}${1000 + num + 1}`
         } else {
           this.pid = ''
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async uploadDoc() {
+      try {
+        const formData = new FormData()
+        formData.append('file', this.file)
+        formData.append('path', 'papers')
+        formData.append('refId', this.paperRes._id)
+        formData.append('ref', 'paper')
+        formData.append('field', 'file')
+        const res = await axios.post('/upload', formData)
+        console.log(res)
+        if (res.data) {
+          this.$notification.open({
+            message: '论文创建成功',
+            type: 'is-success',
+            position: 'is-top'
+          })
+          // this.$router.push('/paper/me')
         }
       } catch (err) {
         console.log(err)
