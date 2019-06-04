@@ -139,6 +139,7 @@
 <script>
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
+import { mapGetters } from 'vuex'
 
 const valiDict = {
   custom: {
@@ -223,15 +224,16 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters({
+      headerAuth: 'getAuthHeader'
+    })
+  },
   async asyncData({ req, params, store, redirect, error }) {
     try {
       const token = store.state.user.token
       if (token) {
-        const res = await axios.get('/papers/' + params.id, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+        const res = await axios.get('/papers/' + params.id, store.getters.getAuthHeader)
         if (res.data) {
           const _data = res.data
           _data.author = _data.author.split(',')
@@ -266,21 +268,21 @@ export default {
           phone: this.paper.phone,
           topic: this.paper.topic,
           user: this.paper.user.id,
-          pid: this.paper.pid,
-          file: this.paper.file
+          pid: this.paper.pid
+          // file: this.paper.file
         }
         data.author = this.paper.author.join(',')
         data.department = this.paper.department.join(',')
         data.keywords = this.paper.keywords.join(',')
 
-        const formData = new FormData()
-        for (const key in data) {
-          if (data.hasOwnProperty(key)) {
-            formData.append(key, data[key])
-          }
-        }
+        // const formData = new FormData()
+        // for (const key in data) {
+        //   if (data.hasOwnProperty(key)) {
+        //     formData.append(key, data[key])
+        //   }
+        // }
 
-        const res = await axios.put('/papers/' + this.paper.id, formData)
+        const res = await axios.put('/papers/' + this.paper.id, data, this.headerAuth)
         if (res.data) {
           this.$notification.open({
             message: '论文编辑成功',

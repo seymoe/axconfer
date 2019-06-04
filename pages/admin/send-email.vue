@@ -40,6 +40,8 @@
 
 <script>
 import axios from '~/plugins/axios'
+import { mapGetters } from 'vuex'
+
 const valiDict = {
   custom: {
     title: {
@@ -65,17 +67,18 @@ export default {
       content: ''
     }
   },
+  computed: {
+    ...mapGetters({
+      headerAuth: 'getAuthHeader'
+    })
+  },
   async asyncData({ req, store, redirect, error }) {
     try {
       const user = store.state.user
       const userId = store.state.user.userInfo._id
       if (user.token && userId) {
         const returnData = {}
-        const res = await axios.get('/users', {
-          headers: {
-            Authorization: `Bearer ${user.token}`
-          }
-        })
+        const res = await axios.get('/users', store.getters.getAuthHeader)
         if (res.data) {
           returnData.userData = res.data
         }
@@ -93,21 +96,28 @@ export default {
   methods: {
     async handleSendMail() {
       try {
-        const data = {
-          // content: '空',
-          // presentation: '墙报',
-          // level: '普通',
-          // paper: this.checkedPapers[0].id,
-          // user: this.checkedProfs[0].id
-        }
-        const res = await axios.post('/email', data)
-        if (res.data) {
+        if (this.checkedUser.length <= 0) {
           this.$notification.open({
-            message: '发送成功',
-            type: 'is-success',
+            message: '请先选择用户',
+            type: 'is-info',
             position: 'is-top'
           })
+          return false
         }
+
+        for (let i = 0; i < this.checkedUser.length; i++) {
+          const data = {
+            html: this.content,
+            to: this.checkedUser[i].email,
+            subject: this.title
+          }
+          await axios.post('/email', data, this.headerAuth)
+        }
+        this.$notification.open({
+          message: '发送成功',
+          type: 'is-success',
+          position: 'is-top'
+        })
         this.checkedUser = []
       } catch (err) {
         console.log(err)

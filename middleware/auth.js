@@ -1,6 +1,5 @@
 export default function ({ app, store, redirect, req, error, route }) {
   try {
-    console.log(store.state.user.token, store.state.user.userInfo._id)
     if (!store.state.user.token || !store.state.user.userInfo._id) {
       if (app.$notification) {
         app.$notification.open({

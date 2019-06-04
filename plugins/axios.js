@@ -1,22 +1,21 @@
 import axios from 'axios'
-const Cookie = process.client ? require('js-cookie') : undefined
+// const Cookie = process.client ? require('js-cookie') : undefined
 
 const instance = axios.create({
   baseURL: process.env.baseUrl
 })
 
-instance.interceptors.request.use((config) => {
-  let token = ''
-  if (process.client) {
-    token = Cookie.get('token')
-  }
-  console.log('use token ', token)
-  token && (config.headers.Authorization = 'Bearer ' + token)
-  return config
-},
-(error) => {
-  return Promise.error(error)
-})
+// instance.interceptors.request.use((config) => {
+//   let token = ''
+//   if (process.client) {
+//     token = Cookie.get('token')
+//   }
+//   token && (config.headers.Authorization = 'Bearer ' + token)
+//   return config
+// },
+// (error) => {
+//   return Promise.error(error)
+// })
 
 instance.interceptors.response.use((response) => {
   return response

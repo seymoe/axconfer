@@ -95,6 +95,7 @@
 <script>
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
+import { mapGetters } from 'vuex'
 
 const valiDict = {
   custom: {
@@ -128,6 +129,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      headerAuth: 'getAuthHeader'
+    }),
     keywords() {
       if (this.review.paper && this.review.paper.keywords) {
         const arr = this.review.paper.keywords.split(',')
@@ -141,11 +145,7 @@ export default {
     try {
       const token = store.state.user.token
       if (token) {
-        const res = await axios.get('/reviews/' + params.id, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+        const res = await axios.get('/reviews/' + params.id, store.getters.getAuthHeader)
         if (res.data) {
           const _form = {
             content: res.data.content,
@@ -181,7 +181,7 @@ export default {
     },
     async handleSubmit() {
       try {
-        const res = await axios.put('/reviews/' + this.review.id, this.form)
+        const res = await axios.put('/reviews/' + this.review.id, this.form, this.headerAuth)
         if (res.data) {
           this.$notification.open({
             message: '评阅成功',

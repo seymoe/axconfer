@@ -72,6 +72,7 @@
 <script>
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
+import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
@@ -87,16 +88,19 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters({
+      headerAuth: 'getHeaderAuth'
+    })
+  },
+
   async asyncData({ req, store, redirect, error }) {
     try {
       const token = store.state.user.token
       const userId = store.state.user.userInfo.id
       if (token && userId) {
-        const res = await axios.get('/papers?user=' + userId, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+        console.log(store.getters)
+        const res = await axios.get('/papers?user=' + userId, store.getters.getAuthHeader)
         if (res.data) {
           return { paperData: res.data }
         }
