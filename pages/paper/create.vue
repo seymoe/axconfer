@@ -82,28 +82,28 @@
                   </b-select>
                 </b-field>
                 <b-field
-                  label="邮箱Email"
+                  label="联系Email"
                   :type="{'is-danger': errors.has('paper.email')}"
                   :message="errors.first('paper.email')"
                 >
                   <b-input v-model="paper.email" v-validate="'required|email'" name="paper.email" type="email" />
                 </b-field>
                 <b-field
-                  label="邮编"
+                  label="联系邮编"
                   :type="{'is-danger': errors.has('paper.postcode')}"
                   :message="errors.first('paper.postcode')"
                 >
                   <b-input v-model="paper.postcode" v-validate="{required: true, regex: /\d{6}/}" name="paper.postcode" />
                 </b-field>
                 <b-field
-                  label="电话"
+                  label="联系电话"
                   :type="{'is-danger': errors.has('paper.phone')}"
                   :message="errors.first('paper.phone')"
                 >
                   <b-input v-model="paper.phone" v-validate="{required: 'paper.phone', regex: /^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$/}" name="paper.phone" />
                 </b-field>
                 <b-field
-                  label="论文初稿"
+                  label="上传论文"
                   :type="{'is-danger': errors.has('file')}"
                   :message="errors.first('file')"
                 >
@@ -115,7 +115,7 @@
                     >
                       <a class="button is-light">
                         <b-icon icon="upload" />
-                        <span>Click to upload</span>
+                        <span>点击上传</span>
                       </a>
                     </b-upload>
                     <span v-if="file" class="file-name">
