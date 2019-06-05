@@ -1,20 +1,22 @@
 <template>
-  <div class="container has-text-centered">
+  <div class="container">
     <div class="column is-4 is-offset-4">
-      <h3 class="title has-text-grey">
+      <h3 class="title has-text-grey has-text-centered">
         注 册
       </h3>
-      <p class="subtitle has-text-grey">
+      <p class="subtitle has-text-grey has-text-centered">
         请根据提示进行注册
       </p>
       <div class="box">
         <b-field
+          label="Email"
           :type="{'is-danger': errors.has('form.email')}"
           :message="errors.first('form.email')"
         >
           <b-input v-model="form.email" v-validate="'required|email'" name="form.email" placeholder="请输入邮箱" type="email" />
         </b-field>
         <b-field
+          label="用户名"
           :type="{'is-danger': errors.has('form.username')}"
           :message="errors.first('form.username')"
         >
@@ -26,6 +28,7 @@
           />
         </b-field>
         <b-field
+          label="密码"
           :type="{'is-danger': errors.has('form.password')}"
           :message="errors.first('form.password')"
         >

@@ -1,24 +1,26 @@
 <template>
-  <div class="container has-text-centered">
+  <div class="container">
     <div class="column is-4 is-offset-4">
-      <h3 class="title has-text-grey">
+      <h3 class="title has-text-grey has-text-centered">
         登 录
       </h3>
-      <p class="subtitle has-text-grey">
+      <p class="subtitle has-text-grey has-text-centered">
         请登录并继续
       </p>
       <div class="box">
-        <figure class="avatar">
+        <figure class="avatar has-text-centered">
           <img src="https://placehold.it/128x128">
         </figure>
         <form>
           <b-field
+            label="Email"
             :type="{'is-danger': errors.has('form.identifier')}"
             :message="errors.first('form.identifier')"
           >
             <b-input v-model="form.identifier" v-validate="'required|email'" name="form.identifier" type="email" />
           </b-field>
           <b-field
+            label="密码"
             :type="{'is-danger': errors.has('form.password')}"
             :message="errors.first('form.password')"
           >
