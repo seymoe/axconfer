@@ -52,3 +52,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.content {
+  text-align: center;
+}
+</style>
