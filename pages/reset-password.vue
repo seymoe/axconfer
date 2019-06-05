@@ -1,10 +1,10 @@
 <template>
-  <div class="container has-text-centered">
+  <div class="container">
     <div class="column is-4 is-offset-4">
-      <h3 class="title has-text-grey">
+      <h3 class="title has-text-grey has-text-centered">
         重设密码
       </h3>
-      <p class="subtitle has-text-grey">
+      <p class="subtitle has-text-grey has-text-centered">
         请输入新密码来重设密码
       </p>
       <div class="box">
@@ -25,9 +25,9 @@
         </form>
       </div>
       <p class="has-text-grey">
-        <a href="/login">登录</a> &nbsp;·&nbsp;
-        <a href="/register">注册</a> &nbsp;·&nbsp;
-        <a href="/">需要帮助？</a>
+        <nuxt-link to="/login">登录</nuxt-link> &nbsp;·&nbsp;
+        <nuxt-link to="/register">注册</nuxt-link> &nbsp;·&nbsp;
+        <nuxt-link to="/help">需要帮助？</nuxt-link>
       </p>
     </div>
   </div>
