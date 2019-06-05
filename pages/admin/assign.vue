@@ -88,10 +88,7 @@ export default {
         { field: 'username', label: '教授名称' },
         { field: 'topic', label: '教授领域' }
       ],
-      profData: [
-        { 'username': '教授1', 'topic': '基础热力学' },
-        { 'username': '教授2', 'topic': '基础热力学' }
-      ],
+      profData: [],
       checkedProfs: []
     }
   },
@@ -148,7 +145,7 @@ export default {
           this.$notification.open({
             message: '请先选择论文',
             type: 'is-info',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           return false
         }
@@ -156,7 +153,7 @@ export default {
           this.$notification.open({
             message: '请先选择教授',
             type: 'is-info',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           return false
         }
@@ -175,7 +172,7 @@ export default {
         this.$notification.open({
           message: '分配成功',
           type: 'is-success',
-          position: 'is-top'
+          position: 'is-top-right'
         })
         this.checkedPapers = []
         this.checkedProfs = []

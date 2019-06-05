@@ -19,15 +19,21 @@
               <input v-model="form.passwordConfirmation" class="input" type="password" placeholder="重复新密码">
             </div>
           </div>
-          <button :disabled="isSubmiting" class="button is-block is-info is-fullwidth" @click="handleLogin">
+          <button :disabled="isSubmiting" class="button is-block is-primary is-fullwidth" @click="handleLogin">
             提交
           </button>
         </form>
         <br>
         <p class="has-text-grey">
-          <nuxt-link to="/login">登录</nuxt-link> &nbsp;·&nbsp;
-          <nuxt-link to="/register">注册</nuxt-link> &nbsp;·&nbsp;
-          <nuxt-link to="/help">需要帮助？</nuxt-link>
+          <nuxt-link to="/login">
+            登录
+          </nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/register">
+            注册
+          </nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/help">
+            需要帮助？
+          </nuxt-link>
         </p>
       </div>
     </div>
@@ -92,7 +98,7 @@ export default {
         this.$notification.open({
           message: '密码重置成功，请重新登录！',
           type: 'is-success',
-          position: 'is-top'
+          position: 'is-top-right'
         })
         setTimeout(() => {
           this.$router.push('/login')
@@ -101,7 +107,7 @@ export default {
         this.$notification.open({
           message: err.message || '密码重置失败，请重试',
           type: 'is-warning',
-          position: 'is-top'
+          position: 'is-top-right'
         })
         setTimeout(() => {
           this.$router.push('/forgot-password')

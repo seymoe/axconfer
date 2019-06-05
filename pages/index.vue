@@ -12,10 +12,13 @@
         </div>
         <div class="column is-8">
           <div class="card">
-            <header class="card-header">
+            <header class="card-header" style="align-items: center;padding-right: 15px">
               <p class="card-header-title">
                 重要通知
               </p>
+              <nuxt-link to="/posts" style="font-size: 13px">
+                查看全部
+              </nuxt-link>
             </header>
             <div class="card-content">
               <div class="content">

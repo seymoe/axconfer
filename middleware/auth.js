@@ -5,7 +5,7 @@ export default function ({ app, store, redirect, req, error, route }) {
         app.$notification.open({
           message: '请先登录',
           type: 'is-info',
-          position: 'is-top'
+          position: 'is-top-right'
         })
       }
       return redirect('/login')

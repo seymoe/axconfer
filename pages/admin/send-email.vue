@@ -100,7 +100,7 @@ export default {
           this.$notification.open({
             message: '请先选择用户',
             type: 'is-info',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           return false
         }
@@ -116,7 +116,7 @@ export default {
         this.$notification.open({
           message: '发送成功',
           type: 'is-success',
-          position: 'is-top'
+          position: 'is-top-right'
         })
         this.checkedUser = []
       } catch (err) {

@@ -41,14 +41,20 @@
             password-reveal
           />
         </b-field>
-        <button class="button is-block is-info is-fullwidth" @click="validateFields">
+        <button class="button is-block is-primary is-fullwidth" @click="validateFields">
           注册
         </button>
         <br>
         <p class="has-text-grey">
-          <nuxt-link to="/login">登录</nuxt-link> &nbsp;·&nbsp;
-          <nuxt-link to="/forgot-password">忘记密码</nuxt-link> &nbsp;·&nbsp;
-          <nuxt-link to="/help">需要帮助？</nuxt-link>
+          <nuxt-link to="/login">
+            登录
+          </nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/forgot-password">
+            忘记密码
+          </nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/help">
+            需要帮助？
+          </nuxt-link>
         </p>
       </div>
     </div>
@@ -129,7 +135,7 @@ export default {
           this.$notification.open({
             message: '注册成功',
             type: 'is-success',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           setTimeout(() => {
             this.$store.commit('user/setToken', res.data.jwt)
@@ -143,7 +149,7 @@ export default {
           this.$notification.open({
             message: '注册失败',
             type: 'is-warning',
-            position: 'is-top'
+            position: 'is-top-right'
           })
         }
         this.isSubmiting = false
@@ -152,7 +158,7 @@ export default {
         this.$notification.open({
           message: '注册失败',
           type: 'is-warning',
-          position: 'is-top'
+          position: 'is-top-right'
         })
         this.isSubmiting = false
       }
