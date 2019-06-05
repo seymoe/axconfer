@@ -1,19 +1,17 @@
 <template>
-  <div class="container has-text-centered">
+  <div class="container">
     <div class="column is-4 is-offset-4">
-      <h3 class="title has-text-grey">
+      <h3 class="title has-text-grey has-text-centered">
         忘记密码
       </h3>
-      <p class="subtitle has-text-grey">
+      <p class="subtitle has-text-grey has-text-centered">
         请输入邮箱并继续
       </p>
       <div class="box">
         <form>
-          <div class="field">
-            <div class="control">
-              <input v-model="form.email" class="input" type="email" placeholder="请输入注册邮箱" autofocus="">
-            </div>
-          </div>
+          <b-field label="Email">
+            <b-input v-model="form.email" type="email"></b-input>
+          </b-field>
           <button :disabled="isSubmiting" class="button is-block is-info is-fullwidth" @click="handleSendEmail">
             继续
           </button>
@@ -22,7 +20,7 @@
       <p class="has-text-grey">
         <a href="/login">登录</a> &nbsp;·&nbsp;
         <a href="/register">注册</a> &nbsp;·&nbsp;
-        <a href="/">需要帮助？</a>
+        <a href="/help">需要帮助？</a>
       </p>
     </div>
   </div>
