@@ -23,6 +23,7 @@ export default {
 
 <style scoped>
 .hero.is-light{
-  background-color: #212121;
+  background-image: url("~assets/trianglify.svg");
+  background-size: 100% 100%;
 }
 </style>

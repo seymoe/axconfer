@@ -38,12 +38,13 @@
             </b-button>
           </b-field>
         </form>
+        <br>
+        <p class="has-text-grey">
+          <nuxt-link to="/register">注册</nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/forgot-password">忘记密码</nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/help">需要帮助？</nuxt-link>
+        </p>
       </div>
-      <p class="has-text-grey">
-        <nuxt-link to="/register">注册</nuxt-link> &nbsp;·&nbsp;
-        <nuxt-link to="/forgot-password">忘记密码</nuxt-link> &nbsp;·&nbsp;
-        <nuxt-link to="/help">需要帮助？</nuxt-link>
-      </p>
     </div>
   </div>
 </template>
