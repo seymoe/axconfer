@@ -46,9 +46,9 @@
         </button>
       </div>
       <p class="has-text-grey">
-        <a href="/login">登录</a> &nbsp;·&nbsp;
-        <a href="/forgot-password">忘记密码</a> &nbsp;·&nbsp;
-        <a href="/help">需要帮助？</a>
+        <nuxt-link to="/login">登录</nuxt-link> &nbsp;·&nbsp;
+        <nuxt-link to="/forgot-password">忘记密码</nuxt-link> &nbsp;·&nbsp;
+        <nuxt-link to="/help">需要帮助？</nuxt-link>
       </p>
     </div>
   </div>

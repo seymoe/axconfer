@@ -18,9 +18,9 @@
         </form>
       </div>
       <p class="has-text-grey">
-        <a href="/login">登录</a> &nbsp;·&nbsp;
-        <a href="/register">注册</a> &nbsp;·&nbsp;
-        <a href="/help">需要帮助？</a>
+        <nuxt-link to="/login">登录</nuxt-link> &nbsp;·&nbsp;
+        <nuxt-link to="/register">注册</nuxt-link> &nbsp;·&nbsp;
+        <nuxt-link to="/help">需要帮助？</nuxt-link>
       </p>
     </div>
   </div>
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       form: {
-        email: 'user01@163.com'
+        email: ''
       },
       isSubmiting: false
     }
