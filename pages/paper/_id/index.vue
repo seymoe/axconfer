@@ -34,6 +34,14 @@
               <p><b>电话：</b>{{ paper.phone }}</p>
               <p><b>邮箱：</b>{{ paper.email }}</p>
               <p><b>主题：</b>{{ paper.topic }}</p>
+              <p>
+                <b>下载：</b>
+                <a :href="paper.file.url" :download="paper.file.name">{{paper.file.name}}</a>
+              </p>
+              <p>
+                <b>评阅：</b>
+                <b-table :data="paper.reviews" :columns="reviewColumns"></b-table>
+              </p>
             </div>
           </div>
         </div>
@@ -66,7 +74,13 @@ export default {
         phone: '',
         topic: '',
         status: ''
-      }
+      },
+      reviewColumns: [
+        { field: 'rid', label: 'RID' },
+        { field: 'presentation', label: '推荐展示' },
+        { field: 'level', label: '推荐等级' },
+        { field: 'content', label: '评阅意见', width: 500 }
+      ]
     }
   },
   computed: {
