@@ -17,19 +17,19 @@
           <nuxt-link to="/" class="navbar-item">
             首页
           </nuxt-link>
-          <nuxt-link to="/organization" class="navbar-item">
+          <nuxt-link to="/page/organization" class="navbar-item">
             组织结构
           </nuxt-link>
-          <nuxt-link to="/date" class="navbar-item">
+          <nuxt-link to="/page/date" class="navbar-item">
             重要日期
           </nuxt-link>
-          <nuxt-link to="/attend" class="navbar-item">
+          <nuxt-link to="/page/attend" class="navbar-item">
             参会注册
           </nuxt-link>
-          <nuxt-link to="/traffic" class="navbar-item">
+          <nuxt-link to="/page/traffic" class="navbar-item">
             交通住宿
           </nuxt-link>
-          <nuxt-link to="/contact" class="navbar-item">
+          <nuxt-link to="/page/contact" class="navbar-item">
             联系我们
           </nuxt-link>
           <template v-if="token && userInfo.role">
@@ -122,7 +122,7 @@ export default {
       this.$notification.open({
         message: '退出成功',
         type: 'is-success',
-        position: 'is-top'
+        position: 'is-top-right'
       })
       this.$router.replace('/')
     }
@@ -135,7 +135,7 @@ export default {
   background-color: rgba(255,255,255,0.05);
 }
 .theme-dark{
-  background-color: #333;
+  background-color: #666;
 }
 .top-header{
   font-weight: bold;

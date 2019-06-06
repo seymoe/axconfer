@@ -1,7 +1,13 @@
 import pkg from './package'
+console.log('server start')
 
 export default {
   mode: 'universal',
+
+  /*
+  ** dev 标示当前正处于开发环境还是生产环境
+  */
+  dev: (process.env.NODE_ENV !== 'production'),
 
   /*
   ** Headers of the page
@@ -39,7 +45,7 @@ export default {
   ** Global CSS
   */
   css: [
-    '~/assets/custom.scss'
+    './assets/custom.scss'
   ],
 
   /*

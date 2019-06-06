@@ -73,11 +73,11 @@
                     placeholder="请选择主题"
                   >
                     <option
-                      v-for="topic in topics"
-                      :key="topic.id"
-                      :value="topic.label"
+                      v-for="(topic, index) in topics"
+                      :key="index"
+                      :value="topic"
                     >
-                      {{ topic.label }}
+                      {{ topic }}
                     </option>
                   </b-select>
                 </b-field>
@@ -141,6 +141,7 @@
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 import { mapGetters } from 'vuex'
+import { TOPIC_ENUM } from '~/config'
 
 const valiDict = {
   custom: {
@@ -185,32 +186,7 @@ export default {
   },
   data() {
     return {
-      topics: [
-        {
-          label: '基础热力学',
-          id: '1'
-        },
-        {
-          label: '热力系统循环',
-          id: '2'
-        },
-        {
-          label: '热泵、制冷空调',
-          id: '3'
-        },
-        {
-          label: '材料热物性',
-          id: '4'
-        },
-        {
-          label: '可再生能源、脱碳、储能等',
-          id: '5'
-        },
-        {
-          label: '热力系统动态特性、诊断与控制',
-          id: '6'
-        }
-      ],
+      topics: TOPIC_ENUM,
       paper: {
         title: '',
         author: [],
@@ -318,7 +294,7 @@ export default {
           this.$notification.open({
             message: '论文创建成功',
             type: 'is-success',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           this.$router.push('/paper/me')
         }

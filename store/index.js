@@ -49,31 +49,36 @@ export const getters = {
 
 export const actions = {
   async nuxtServerInit({ commit }, context) {
-    let token = ''
-    let userInfo = {}
-    if (context.req.headers.cookie) {
-      try {
-        const parsed = cookieparser.parse(context.req.headers.cookie)
-        token = parsed.token
-        userInfo = JSON.parse(parsed.userInfo) || {}
-      } catch (err) {
-        // No valid cookie found
+    try {
+      console.log('starting')
+      let token = ''
+      let userInfo = {}
+      if (context.req.headers.cookie) {
+        try {
+          const parsed = cookieparser.parse(context.req.headers.cookie)
+          token = parsed.token
+          userInfo = JSON.parse(parsed.userInfo) || {}
+        } catch (err) {
+          // No valid cookie found
+        }
       }
-    }
-    commit('user/setToken', token)
-    commit('user/setUserInfo', userInfo)
+      commit('user/setToken', token)
+      commit('user/setUserInfo', userInfo)
 
-    // 顶部会议数据
-    const resConfer = await axios.get('/conferences?_limit=1')
-    commit('setConference', resConfer.data || [])
-    // 左侧边栏数据
-    const resCards = await axios.get('/cards')
-    if (resCards.data.length) {
-      const obj = {}
-      resCards.data.forEach((item) => {
-        obj[item.slug] = item
-      })
-      commit('setCards', obj)
+      // 顶部会议数据
+      const resConfer = await axios.get('/conferences?_limit=1')
+      commit('setConference', resConfer.data || [])
+      // // 左侧边栏数据
+      const resCards = await axios.get('/cards')
+      if (resCards.data.length) {
+        const obj = {}
+        resCards.data.forEach((item) => {
+          obj[item.slug] = item
+        })
+        commit('setCards', obj)
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 }

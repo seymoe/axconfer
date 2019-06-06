@@ -32,17 +32,21 @@
               password-reveal
             />
           </b-field>
-          <b-field>
-            <b-button :disabled="isSubmiting" type="is-primary is-fullwidth" @click="validateFields">
-              登录
-            </b-button>
-          </b-field>
+          <b-button :disabled="isSubmiting" type="is-primary is-fullwidth" @click="validateFields">
+            登录
+          </b-button>
         </form>
         <br>
         <p class="has-text-grey">
-          <nuxt-link to="/register">注册</nuxt-link> &nbsp;·&nbsp;
-          <nuxt-link to="/forgot-password">忘记密码</nuxt-link> &nbsp;·&nbsp;
-          <nuxt-link to="/help">需要帮助？</nuxt-link>
+          <nuxt-link to="/register">
+            注册
+          </nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/forgot-password">
+            忘记密码
+          </nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/help">
+            需要帮助？
+          </nuxt-link>
         </p>
       </div>
     </div>
@@ -101,7 +105,7 @@ export default {
           this.$notification.open({
             message: '登录成功',
             type: 'is-success',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           setTimeout(() => {
             this.$store.commit('user/setToken', res.data.jwt)
@@ -114,7 +118,7 @@ export default {
           this.$notification.open({
             message: '登录失败',
             type: 'is-warning',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           this.isSubmiting = false
         }
@@ -123,7 +127,7 @@ export default {
         this.$notification.open({
           message: '登录失败',
           type: 'is-warning',
-          position: 'is-top'
+          position: 'is-top-right'
         })
         this.isSubmiting = false
       }

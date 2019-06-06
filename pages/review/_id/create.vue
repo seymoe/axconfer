@@ -40,14 +40,12 @@
                 :message="errors.first('form.presentation')"
               >
                 <b-select v-model="form.presentation" v-validate="'required'" name="form.presentation" placeholder="请选择">
-                  <option value="口头">
-                    口头
-                  </option>
-                  <option value="墙报">
-                    墙报
-                  </option>
-                  <option value="未选择">
-                    未选择
+                  <option
+                    v-for="(pre, index) in pres"
+                    :key="index"
+                    :value="pre"
+                  >
+                    {{ pre }}
                   </option>
                 </b-select>
               </b-field>
@@ -58,14 +56,12 @@
                 :message="errors.first('form.level')"
               >
                 <b-select v-model="form.level" v-validate="'required'" name="form.level" placeholder="请选择">
-                  <option value="普通">
-                    普通
-                  </option>
-                  <option value="优秀">
-                    优秀
-                  </option>
-                  <option value="未选择">
-                    未选择
+                  <option
+                    v-for="(level, index) in levels"
+                    :key="index"
+                    :value="level"
+                  >
+                    {{ level }}
                   </option>
                 </b-select>
               </b-field>
@@ -96,6 +92,7 @@
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 import { mapGetters } from 'vuex'
+import { PRESENTATION_ENUM, LEVEL_ENUM } from '~/config'
 
 const valiDict = {
   custom: {
@@ -117,6 +114,8 @@ export default {
   },
   data() {
     return {
+      pres: PRESENTATION_ENUM,
+      levels: LEVEL_ENUM,
       form: {
         content: '',
         presentation: '',
@@ -186,7 +185,7 @@ export default {
           this.$notification.open({
             message: '评阅成功',
             type: 'is-success',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           this.$router.push('/review/me')
         }

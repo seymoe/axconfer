@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hero is-light is-medium">
+    <section class="hero is-light is-medium" :style="{backgroundImage: 'url('+ conferList[0]['headerImage']['url'] +')'}">
       <div class="hero-head">
         <Header theme="light" />
       </div>
@@ -45,7 +45,6 @@ export default {
 <style scoped>
 .hero{
   position: relative;
-  background-image: url(https://s1.ax1x.com/2018/02/10/9G1HDH.jpg);
   background-position: center center;
   background-size: cover;
 }

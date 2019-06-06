@@ -10,17 +10,23 @@
       <div class="box">
         <form>
           <b-field label="Email">
-            <b-input v-model="form.email" type="email"></b-input>
+            <b-input v-model="form.email" type="email" />
           </b-field>
-          <button :disabled="isSubmiting" class="button is-block is-info is-fullwidth" @click="handleSendEmail">
+          <button :disabled="isSubmiting" class="button is-block is-primary is-fullwidth" @click="handleSendEmail">
             继续
           </button>
         </form>
         <br>
         <p class="has-text-grey">
-          <nuxt-link to="/login">登录</nuxt-link> &nbsp;·&nbsp;
-          <nuxt-link to="/register">注册</nuxt-link> &nbsp;·&nbsp;
-          <nuxt-link to="/help">需要帮助？</nuxt-link>
+          <nuxt-link to="/login">
+            登录
+          </nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/register">
+            注册
+          </nuxt-link> &nbsp;·&nbsp;
+          <nuxt-link to="/help">
+            需要帮助？
+          </nuxt-link>
         </p>
       </div>
     </div>
@@ -29,7 +35,8 @@
 
 <script>
 import axios from '~/plugins/axios'
-// const Cookie = process.client ? require('js-cookie') : undefined
+import nuxtConf from '~/nuxt.config.js'
+import { RESET_PASS_URL_PREFIX } from '~/config'
 
 export default {
   layout: 'inhero',
@@ -49,9 +56,10 @@ export default {
           return false
         }
         this.isSubmiting = true
+        const _prefix = nuxtConf.dev ? RESET_PASS_URL_PREFIX.dev : RESET_PASS_URL_PREFIX.prod
         const res = await axios.post('/auth/forgot-password', {
           email,
-          url: 'http://localhost:3000/reset-password'
+          url: _prefix + '/reset-password'
         }, {
           headers: {}
         })
@@ -60,7 +68,7 @@ export default {
           this.$notification.open({
             message: '邮件发送成功，请查收！',
             type: 'is-success',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           setTimeout(() => {
             this.$router.push('/')
@@ -69,7 +77,7 @@ export default {
           this.$notification.open({
             message: '邮件发送失败，请重试！',
             type: 'is-warning',
-            position: 'is-top'
+            position: 'is-top-right'
           })
           this.isSubmiting = false
         }
@@ -78,7 +86,7 @@ export default {
         this.$notification.open({
           message: '邮件发送失败，请重试！',
           type: 'is-warning',
-          position: 'is-top'
+          position: 'is-top-right'
         })
         this.isSubmiting = false
       }
