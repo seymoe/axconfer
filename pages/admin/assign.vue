@@ -116,7 +116,7 @@ export default {
   async asyncData({ req, store, redirect, error }) {
     try {
       const user = store.state.user
-      const userId = store.state.user.userInfo._id
+      const userId = store.state.user.userInfo.id
       if (user.token && userId) {
         const returnData = {}
         const res = await axios.get('/papers', store.getters.getAuthHeader)
@@ -159,10 +159,10 @@ export default {
         }
         // 循环发送请求
         for (let i = 0; i < this.checkedPapers.length; i++) {
-          const paperId = this.checkedPapers[i]._id
+          const paperId = this.checkedPapers[i].id
           for (let j = 0; j < this.checkedProfs.length; j++) {
-            const profId = this.checkedProfs[j]._id
-            const data = { paper: paperId, user: profId }
+            const profId = this.checkedProfs[j].id
+            const data = { paperId: paperId, userId: profId }
             await axios.post('/reviews', data, this.headerAuth)
           }
           // 分配评阅后论文状态是评阅中

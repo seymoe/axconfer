@@ -50,7 +50,6 @@ export const getters = {
 export const actions = {
   async nuxtServerInit({ commit }, context) {
     try {
-      console.log('starting')
       let token = ''
       let userInfo = {}
       if (context.req.headers.cookie) {

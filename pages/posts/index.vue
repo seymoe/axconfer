@@ -24,7 +24,7 @@
                   </b-table-column>
 
                   <b-table-column label="通知标题">
-                    <nuxt-link :to="'/posts/' + props.row._id">
+                    <nuxt-link :to="'/posts/' + props.row.id">
                       {{ props.row.title }}
                     </nuxt-link>
                   </b-table-column>

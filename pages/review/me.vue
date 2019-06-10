@@ -92,7 +92,8 @@ export default {
       const token = store.state.user.token
       const userId = store.state.user.userInfo.id
       if (token && userId) {
-        const res = await axios.get('/reviews?user=' + userId, store.getters.getAuthHeader)
+        const res = await axios.get('/reviews?userId=' + userId, store.getters.getAuthHeader)
+        console.log(res)
         if (res.status === 200) {
           return { paperData: res.data }
         } else {

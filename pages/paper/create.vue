@@ -256,7 +256,7 @@ export default {
 
         const res = await axios.post('/papers', data, this.headerAuth)
         console.log(res)
-        if (res.data && res.data._id) {
+        if (res.data && res.data.id) {
           this.paperRes = res.data
           this.uploadDoc()
         }
@@ -283,7 +283,7 @@ export default {
       try {
         const formData = new FormData()
         formData.append('files', this.file)
-        formData.append('refId', this.paperRes._id)
+        formData.append('refId', this.paperRes.id)
         formData.append('ref', 'paper')
         formData.append('field', 'file')
         const res = await axios.post('/upload', formData, Object.assign(this.headerAuth, {

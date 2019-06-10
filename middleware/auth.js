@@ -1,6 +1,6 @@
 export default function ({ app, store, redirect, req, error, route }) {
   try {
-    if (!store.state.user.token || !store.state.user.userInfo._id) {
+    if (!store.state.user.token || !store.state.user.userInfo.id) {
       if (app.$notification) {
         app.$notification.open({
           message: '请先登录',
