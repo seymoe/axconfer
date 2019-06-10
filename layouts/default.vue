@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hero is-light is-medium" :style="{backgroundImage: 'url('+ conferList[0]['headerImage']['url'] +')'}">
+    <section class="hero is-light is-medium" :style="{backgroundImage: 'url('+ conferList[0]['headerImageUrl'] +')'}">
       <div class="hero-head">
         <Header theme="light" />
       </div>
