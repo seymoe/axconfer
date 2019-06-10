@@ -162,7 +162,7 @@ export default {
           const paperId = this.checkedPapers[i].id
           for (let j = 0; j < this.checkedProfs.length; j++) {
             const profId = this.checkedProfs[j].id
-            const data = { paper: paperId, user: profId }
+            const data = { paperId: paperId, userId: profId }
             await axios.post('/reviews', data, this.headerAuth)
           }
           // 分配评阅后论文状态是评阅中
