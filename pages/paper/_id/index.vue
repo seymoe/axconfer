@@ -36,7 +36,7 @@
               <p><b>主题：</b>{{ paper.topic }}</p>
               <p v-if="paper.file && paper.file.url">
                 <b>下载：</b>
-                <a :href="paper.file.url" :download="paper.file.name">{{ paper.file.name }}</a>
+                <a :href="paper.file.url" :download="paper.file.name" target="_blank">{{ paper.file.name }}</a>
               </p>
               <p v-else>
                 论文未上传
@@ -79,9 +79,9 @@ export default {
         status: ''
       },
       reviewColumns: [
-        { field: 'rid', label: 'RID' },
         { field: 'presentation', label: '推荐展示', width: 200 },
         { field: 'level', label: '推荐等级', width: 200 },
+        { field: 'recommend', label: '推荐期刊', width: 200 },
         { field: 'content', label: '评阅意见', width: 500 }
       ]
     }
@@ -119,9 +119,12 @@ export default {
     try {
       const token = store.state.user.token
       if (token) {
-        const res = await axios.get('/papers/' + params.id, store.getters.getAuthHeader)
-        if (res.data) {
-          return { paper: res.data }
+        const { data: paper } = await axios.get('/papers/' + params.id, store.getters.getAuthHeader)
+        if (paper) {
+          const { data: reviews } = await axios.get(`/reviews?paperId=${paper.id}`, store.getters.getAuthHeader)
+          paper.reviews = reviews
+          // console.log(reviews)
+          return { paper: paper }
         }
       } else {
         redirect('/login')

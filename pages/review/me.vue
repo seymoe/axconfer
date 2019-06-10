@@ -87,21 +87,17 @@ export default {
       headerAuth: 'getAuthHeader'
     })
   },
-  async asyncData({ req, store }) {
+  async asyncData({ req, store, redirect }) {
     try {
       const token = store.state.user.token
       const userId = store.state.user.userInfo.id
-      if (!token) {
-        // 没有token 跳转
-        return
-      }
-      if (!userId) {
-        // 没有userId 跳转
+      if (!token || !userId) {
+        redirect('/login')
         return
       }
       const res = await axios.get('/reviews?userId=' + userId, store.getters.getAuthHeader)
       if (res.status !== 200) {
-        // 没有status200 跳转
+        // redirect('/login')
         return
       }
       const reviewData = res.data
