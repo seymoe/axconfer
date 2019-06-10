@@ -24,3 +24,8 @@ export const LEVEL_ENUM = [
   '优秀',
   '未选择'
 ]
+
+export const RECOMMEND_ENUM = [
+  '推荐期刊',
+  '未选择'
+]

@@ -15,11 +15,11 @@
             </header>
             <div class="card-content">
               <b-table
-                :data="paperData"
+                :data="reviewData"
                 :hoverable="true"
               >
                 <template slot-scope="props">
-                  <b-table-column field="pid" label="论文编号">
+                  <b-table-column field="paper.pid" label="论文编号">
                     {{ props.row.paper.pid }}
                   </b-table-column>
 
@@ -91,17 +91,29 @@ export default {
     try {
       const token = store.state.user.token
       const userId = store.state.user.userInfo.id
-      if (token && userId) {
-        const res = await axios.get('/reviews?userId=' + userId, store.getters.getAuthHeader)
-        console.log(res)
-        if (res.status === 200) {
-          return { paperData: res.data }
-        } else {
-          // 返回首页登录
-        }
-      } else {
-        // 返回首页登录
+      if (!token) {
+        // 没有token 跳转
+        return
       }
+      if (!userId) {
+        // 没有userId 跳转
+        return
+      }
+      const res = await axios.get('/reviews?userId=' + userId, store.getters.getAuthHeader)
+      if (res.status !== 200) {
+        // 没有status200 跳转
+        return
+      }
+      const reviewData = res.data
+      for (let i = 0; i < reviewData.length; i++) {
+        const paperId = reviewData[i].paperId
+        const { data: paper } = await axios.get(`/papers/${paperId}`, store.getters.getAuthHeader)
+        reviewData[i].paper = {}
+        reviewData[i].paper.title = paper.title
+        reviewData[i].paper.pid = paper.pid
+        reviewData[i].paper.status = paper.status
+      }
+      return { reviewData: reviewData }
     } catch (err) {
       console.log(err)
     }

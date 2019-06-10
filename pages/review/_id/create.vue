@@ -67,6 +67,22 @@
               </b-field>
               <b-field
                 horizontal
+                label="推荐期刊："
+                :type="{'is-danger': errors.has('form.recommend')}"
+                :message="errors.first('form.recommend')"
+              >
+                <b-select v-model="form.recommend" v-validate="'required'" name="form.recommend" placeholder="请选择">
+                  <option
+                    v-for="(reco, index) in recos"
+                    :key="index"
+                    :value="reco"
+                  >
+                    {{ reco }}
+                  </option>
+                </b-select>
+              </b-field>
+              <b-field
+                horizontal
                 label="评阅意见："
                 :type="{'is-danger': errors.has('form.content')}"
                 :message="errors.first('form.content')"
@@ -92,7 +108,7 @@
 import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 import { mapGetters } from 'vuex'
-import { PRESENTATION_ENUM, LEVEL_ENUM } from '~/config'
+import { PRESENTATION_ENUM, LEVEL_ENUM, RECOMMEND_ENUM } from '~/config'
 
 const valiDict = {
   custom: {
@@ -116,10 +132,12 @@ export default {
     return {
       pres: PRESENTATION_ENUM,
       levels: LEVEL_ENUM,
+      recos: RECOMMEND_ENUM,
       form: {
         content: '',
         presentation: '',
         level: '',
+        recommend: '',
         paper: '',
         user: '',
         rid: ''
@@ -144,18 +162,22 @@ export default {
     try {
       const token = store.state.user.token
       if (token) {
-        const res = await axios.get('/reviews/' + params.id, store.getters.getAuthHeader)
-        if (res.data) {
+        const { data: review } = await axios.get('/reviews/' + params.id, store.getters.getAuthHeader)
+        const paperId = review.paperId
+        const { data: paper } = await axios.get(`/papers/${paperId}`, store.getters.getAuthHeader)
+        review.paper = paper
+        // console.log(review)
+        if (review) {
           const _form = {
-            content: res.data.content,
-            presentation: res.data.presentation,
-            level: res.data.level,
-            paper: res.data.paper.id,
-            user: res.data.user.id,
-            rid: res.data.id
+            content: review.content,
+            presentation: review.presentation,
+            recommend: review.recommend,
+            level: review.level,
+            paperId: review.paperId,
+            userId: review.userId
           }
           return {
-            review: res.data,
+            review: review,
             form: _form
           }
         }
