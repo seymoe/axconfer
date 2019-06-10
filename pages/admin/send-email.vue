@@ -75,7 +75,7 @@ export default {
   async asyncData({ req, store, redirect, error }) {
     try {
       const user = store.state.user
-      const userId = store.state.user.userInfo._id
+      const userId = store.state.user.userInfo.id
       if (user.token && userId) {
         const returnData = {}
         const res = await axios.get('/users', store.getters.getAuthHeader)

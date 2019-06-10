@@ -93,7 +93,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      headerAuth: 'getHeaderAuth'
+      headerAuth: 'getAuthHeader'
     })
   },
 
