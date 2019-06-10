@@ -8,7 +8,7 @@
             :key="item.value"
             v-model="currentStatus"
             :native-value="item.value"
-            type="is-danger"
+            type="is-info"
           >
             <span>{{ item.label }}</span>
           </b-radio-button>
@@ -26,6 +26,9 @@
       </div>
 
       <div class="column is-3">
+        <b-field>
+          <b-button type="is-info" @click="handleExportCsv">导出论文列表</b-button>
+        </b-field>
         <b-table
           :data="profFiltrData"
           :columns="profColumns"
@@ -46,6 +49,7 @@
 
 <script>
 import axios from '~/plugins/axios'
+import XLSX from 'xlsx'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -192,6 +196,14 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    // 导出论文csv
+    handleExportCsv() {
+      const wb = XLSX.utils.book_new()
+      const ws = XLSX.utils.json_to_sheet(this.paperData, { header: ['pid', 'title', 'topic', 'author', 'keywords', 'department', 'postcode', 'phone', 'email'] })
+      XLSX.utils.book_append_sheet(wb, ws, 'paper')
+      // console.log(wb)
+      XLSX.writeFile(wb, 'papers.xlsx')
     }
   }
 }
