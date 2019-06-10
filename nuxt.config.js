@@ -1,4 +1,5 @@
-import pkg from './package'
+import { SITE } from './config'
+
 console.log('server start')
 
 export default {
@@ -13,11 +14,11 @@ export default {
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    title: SITE.title,
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      { hid: 'description', name: 'description', content: SITE.desc }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

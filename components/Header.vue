@@ -4,7 +4,7 @@
       <div class="navbar-brand">
         <a class="navbar-item logo" href="/">
           <!-- <img src="http://bulma.io/images/bulma-type-white.png" alt="Logo"> -->
-          工程热物理
+          {{site.title}}
         </a>
         <span class="navbar-burger burger" data-target="navbarMenu">
           <span />
@@ -96,6 +96,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { SITE } from '~/config'
+
 const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
@@ -106,7 +108,9 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      site: SITE
+    }
   },
   computed: {
     ...mapGetters({

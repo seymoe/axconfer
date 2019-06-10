@@ -3,6 +3,11 @@ export const RESET_PASS_URL_PREFIX = {
   prod: 'www.thermophysics.cn'
 }
 
+export const SITE = {
+  title: '工程热物理学会',
+  desc: '工程热力学与能源利用分会'
+}
+
 export const TOPIC_ENUM = [
   '基础热力学',
   '热力系统循环',
