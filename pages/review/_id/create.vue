@@ -162,24 +162,30 @@ export default {
     try {
       const token = store.state.user.token
       if (token) {
-        const { data: review } = await axios.get('/reviews/' + params.id, store.getters.getAuthHeader)
+        const { data: review } = await axios.get(`/reviews/${params.id}`, store.getters.getAuthHeader)
         const paperId = review.paperId
         const { data: paper } = await axios.get(`/papers/${paperId}`, store.getters.getAuthHeader)
         review.paper = paper
         // console.log(review)
         if (review) {
-          const _form = {
-            content: review.content,
-            presentation: review.presentation,
-            recommend: review.recommend,
-            level: review.level,
-            paperId: review.paperId,
-            userId: review.userId
+          if (Number(review.userId) !== store.state.user.userInfo.id) {
+            error({ statusCode: 403, message: '权限错误' })
+          } else {
+            const _form = {
+              content: review.content,
+              presentation: review.presentation,
+              recommend: review.recommend,
+              level: review.level,
+              paperId: review.paperId,
+              userId: review.userId
+            }
+            return {
+              review: review,
+              form: _form
+            }
           }
-          return {
-            review: review,
-            form: _form
-          }
+        } else {
+          error({ statusCode: 404, message: '页面走丢了' })
         }
       } else {
         redirect('/login')
@@ -202,7 +208,7 @@ export default {
     },
     async handleSubmit() {
       try {
-        const res = await axios.put('/reviews/' + this.review.id, this.form, this.headerAuth)
+        const res = await axios.put(`/reviews/${this.review.id}`, this.form, this.headerAuth)
         if (res.data) {
           this.$notification.open({
             message: '评阅成功',

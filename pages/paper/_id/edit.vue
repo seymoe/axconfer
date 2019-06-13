@@ -211,13 +211,20 @@ export default {
     try {
       const token = store.state.user.token
       if (token) {
-        const res = await axios.get('/papers/' + params.id, store.getters.getAuthHeader)
+        const res = await axios.get(`/papers/${params.id}`, store.getters.getAuthHeader)
         if (res.data) {
           const _data = res.data
           _data.author = _data.author.split(',')
           _data.department = _data.department.split(',')
           _data.keywords = _data.keywords.split(',')
-          return { paper: _data }
+          if (!_data.user || _data.user.id !== store.state.user.userInfo.id) {
+            // 防止看到其他用户的paper
+            error({ statusCode: 403, message: '权限错误' })
+          } else {
+            return { paper: _data }
+          }
+        } else {
+          error({ statusCode: 404, message: '页面走丢了' })
         }
       } else {
         redirect('/login')
@@ -260,7 +267,7 @@ export default {
         //   }
         // }
 
-        const res = await axios.put('/papers/' + this.paper.id, data, this.headerAuth)
+        const res = await axios.put(`/papers/${this.paper.id}`, data, this.headerAuth)
         if (res.data) {
           this.$notification.open({
             message: '论文编辑成功',

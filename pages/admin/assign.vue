@@ -27,7 +27,9 @@
 
       <div class="column is-3">
         <b-field>
-          <b-button type="is-info" @click="handleExportCsv">导出论文列表</b-button>
+          <b-button type="is-info" @click="handleExportCsv">
+            导出论文列表
+          </b-button>
         </b-field>
         <b-table
           :data="profFiltrData"
@@ -170,7 +172,7 @@ export default {
             await axios.post('/reviews', data, this.headerAuth)
           }
           // 分配评阅后论文状态是评阅中
-          await axios.put('/papers/' + paperId, { status: '评阅中' }, this.headerAuth)
+          await axios.put(`/papers/${paperId}`, { status: '评阅中' }, this.headerAuth)
         }
 
         this.$notification.open({

@@ -41,9 +41,16 @@ export default {
     }
   },
   async asyncData(context) {
-    const res = await axios.get('/pages?slug=' + context.params.slug)
-    console.log(res.data)
-    return { pageData: res.data.length ? res.data[0] : {} }
+    try {
+      const res = await axios.get(`/pages?slug=${context.params.slug}`)
+      if (!res || !res.data || !res.data.length) {
+        context.error({ statusCode: 404, message: '页面走丢了' })
+      } else {
+        return { pageData: res.data.length ? res.data[0] : {} }
+      }
+    } catch (err) {
+      context.error({ statusCode: 404, message: '页面走丢了' })
+    }
   }
 }
 </script>

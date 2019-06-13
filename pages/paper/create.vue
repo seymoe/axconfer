@@ -267,7 +267,7 @@ export default {
     async getPidNumber() {
       if (!this.currentYear) return false
       try {
-        const res = await axios.get('/papers/count?year=' + this.currentYear, this.headerAuth)
+        const res = await axios.get(`/papers/count?year=${this.currentYear}`, this.headerAuth)
         if (this.currentYear && res.data) {
           const year = this.currentYear.slice(this.currentYear.length - 2)
           const num = +res.data
