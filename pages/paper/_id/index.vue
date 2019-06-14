@@ -119,12 +119,18 @@ export default {
     try {
       const token = store.state.user.token
       if (token) {
-        const { data: paper } = await axios.get('/papers/' + params.id, store.getters.getAuthHeader)
+        const { data: paper } = await axios.get(`/papers/${params.id}`, store.getters.getAuthHeader)
         if (paper) {
           const { data: reviews } = await axios.get(`/reviews?paperId=${paper.id}`, store.getters.getAuthHeader)
           paper.reviews = reviews
-          // console.log(reviews)
-          return { paper: paper }
+          if (!paper.user || paper.user.id !== store.state.user.userInfo.id) {
+            // 防止看到其他用户的paper
+            error({ statusCode: 403, message: '权限错误' })
+          } else {
+            return { paper: paper }
+          }
+        } else {
+          error({ statusCode: 404, message: '页面走丢了' })
         }
       } else {
         redirect('/login')

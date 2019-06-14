@@ -103,7 +103,7 @@ export default {
       const userId = store.state.user.userInfo.id
       if (token && userId) {
         console.log(store.getters)
-        const res = await axios.get('/papers?user=' + userId, store.getters.getAuthHeader)
+        const res = await axios.get(`/papers?user=${userId}`, store.getters.getAuthHeader)
         if (res.data) {
           return { paperData: res.data }
         }

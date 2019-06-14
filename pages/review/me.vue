@@ -95,7 +95,7 @@ export default {
         redirect('/login')
         return
       }
-      const res = await axios.get('/reviews?userId=' + userId, store.getters.getAuthHeader)
+      const res = await axios.get(`/reviews?userId=${userId}`, store.getters.getAuthHeader)
       if (res.status !== 200) {
         // redirect('/login')
         return

@@ -53,7 +53,7 @@ export default {
   },
   async asyncData({ req, params, store, redirect, error }) {
     try {
-      const res = await axios.get('/posts/' + params.id)
+      const res = await axios.get(`/posts/${params.id}`)
       if (res.data) {
         const d = res.data
         d.createdAt = dayjs(d.createdAt).format('YYYY-MM-DD')
