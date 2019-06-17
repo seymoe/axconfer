@@ -1,17 +1,24 @@
 <template>
   <div class="container">
     <div class="columns">
-      <div class="column is-9">
-        <b-field>
-          <b-radio-button
-            v-for="item in statusArr"
-            :key="item.value"
-            v-model="currentStatus"
-            :native-value="item.value"
-            type="is-info"
-          >
-            <span>{{ item.label }}</span>
-          </b-radio-button>
+      <div class="column is-10">
+        <b-field class="flex-row">
+          <div style="display: flex;justify-content: start">
+            <b-radio-button
+              v-for="item in statusArr"
+              :key="item.value"
+              v-model="currentStatus"
+              :native-value="item.value"
+              type="is-info"
+            >
+              <span>{{ item.label }}</span>
+            </b-radio-button>
+          </div>
+          <b-field>
+            <b-button type="is-info" @click="handleExportCsv">
+              导出论文列表
+            </b-button>
+          </b-field>
         </b-field>
         <b-table
           :data="paperFilterData"
@@ -25,12 +32,17 @@
         </b-table>
       </div>
 
-      <div class="column is-3">
-        <b-field>
-          <b-button type="is-info" @click="handleExportCsv">
-            导出论文列表
-          </b-button>
-        </b-field>
+      <div class="column is-2">
+        <!-- 筛选话题 -->
+        <b-select placeholder="请选择">
+          <option
+            v-for="(option, idx) in topics"
+            :key="idx"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </b-select>
         <b-table
           :data="profFiltrData"
           :columns="profColumns"
@@ -53,6 +65,7 @@
 import axios from '~/plugins/axios'
 import XLSX from 'xlsx'
 import { mapGetters } from 'vuex'
+import { TOPIC_ENUM } from '~/config'
 
 export default {
   middleware: 'auth',
@@ -91,11 +104,13 @@ export default {
       paperFilterData: [],
       checkedPapers: [],
       profColumns: [
-        { field: 'username', label: '教授名称' },
-        { field: 'topic', label: '教授领域' }
+        { field: 'username', label: '教授姓名' }
+        // { field: 'topic', label: '教授领域' }
       ],
       profData: [],
-      checkedProfs: []
+      checkedProfs: [],
+
+      topics: TOPIC_ENUM
     }
   },
   computed: {
@@ -199,6 +214,15 @@ export default {
         console.log(err)
       }
     },
+    // 客户端拉取prof列表
+    async fetchProfList() {
+      try {
+        const profRes = await axios.get('/users', this.getAuthHeader)
+        this.profData = profRes.data
+      } catch (err) {
+        console.log(err)
+      }
+    },
     // 导出论文csv
     handleExportCsv() {
       const wb = XLSX.utils.book_new()
@@ -210,3 +234,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.flex-row{
+  display: flex;
+  justify-content: space-between;
+}
+</style>

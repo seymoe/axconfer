@@ -46,7 +46,10 @@ export default {
   ** Global CSS
   */
   css: [
-    './assets/custom.scss'
+    './assets/custom.scss',
+    'quill/dist/quill.snow.css',
+    'quill/dist/quill.bubble.css',
+    'quill/dist/quill.core.css'
   ],
 
   /*
@@ -54,7 +57,8 @@ export default {
   */
   plugins: [
     { src: '~/plugins/axios.js' },
-    { src: '~/plugins/vee-validate.js' }
+    { src: '~/plugins/vee-validate.js' },
+    { src: '~plugins/nuxt-quill-plugin.js', ssr: false }
   ],
 
   /*

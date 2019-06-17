@@ -35,3 +35,11 @@ export const RECOMMEND_ENUM = [
   '不推荐',
   '未选择'
 ]
+
+// 文章分类
+export const POST_CATEGORY = [
+  '未分类',
+  '通知',
+  '新闻',
+  '下载'
+]
