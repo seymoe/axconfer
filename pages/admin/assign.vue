@@ -23,10 +23,30 @@
         <b-table
           :narrowed="true"
           :data="paperFilterData"
-          :columns="paperColumns"
           :checked-rows.sync="checkedPapers"
           checkable
         >
+          <template slot-scope="props">
+            <b-table-column field="pid" label="论文编号" width="90">
+              {{ props.row.pid }}
+            </b-table-column>
+            <b-table-column field="title" label="论文标题" width="300">
+              <a :href="props.row.file.url" :download="`${props.row.pid}+${props.row.author}`">{{ props.row.title }}</a>
+            </b-table-column>
+            <b-table-column field="topic" label="领域" width="120">
+              {{ props.row.topic }}
+            </b-table-column>
+            <b-table-column field="keywords" label="关键词" width="150">
+              {{ props.row.keywords }}
+            </b-table-column>
+            <b-table-column field="author" label="作者" width="150">
+              {{ props.row.author }}
+            </b-table-column>
+            <b-table-column field="status" label="状态" width="90">
+              {{ props.row.status }}
+            </b-table-column>
+          </template>
+
           <!-- <template slot="bottom-left">
             <b>Total checked</b>: {{ checkedPapers.length }}
           </template> -->

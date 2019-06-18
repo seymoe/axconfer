@@ -19,8 +19,12 @@
                 :hoverable="true"
               >
                 <template slot-scope="props">
-                  <b-table-column label="发布日期" field="createdAt" width="160">
+                  <b-table-column label="发布日期" field="createdAt" width="120">
                     {{ props.row.createdAt }}
+                  </b-table-column>
+
+                  <b-table-column label="分类" field="category" width="80">
+                    {{ props.row.category }}
                   </b-table-column>
 
                   <b-table-column label="通知标题">

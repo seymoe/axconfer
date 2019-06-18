@@ -29,7 +29,8 @@
         <p>
           Copyright © <a href="http://www.cset.org.cn">中国工程热物理学会</a> | 
           <a href="http://beian.miit.gov.cn">京ICP备15011708号-5</a> | 
-          <a href="http://www.thermophysics.cn">中国工程热物理学会工程热力学与能源利用分会</a>
+          <a href="http://www.thermophysics.cn">工程热力学与能源利用分会</a> |
+          Designed by <a href="http://www.starsoul.com.cn">StarSoul</a>
         </p>
       </div>
     </footer>
