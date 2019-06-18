@@ -8,9 +8,9 @@
         请登录并继续
       </p>
       <div class="box">
-        <figure class="avatar has-text-centered">
-          <img src="https://placehold.it/128x128">
-        </figure>
+        <div class="notification is-warning">
+          会议网站整体升级，原网站注册用户已迁移至当前新网站，初始密码为123456，可通过找回密码功能重设新密码！
+        </div>
         <form>
           <b-field
             label="Email"
