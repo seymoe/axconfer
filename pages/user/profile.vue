@@ -20,17 +20,17 @@
                   :type="{'is-danger': errors.has('userInfo.username')}"
                   :message="errors.first('userInfo.username')"
                 >
-                  <b-input v-model="paper.title" v-validate="'required'" name="userInfo.username" />
+                  <b-input v-model="userInfo.username" v-validate="'required'" name="userInfo.username" />
                 </b-field>
                 <b-field
                   label="单位"
-                  :type="{'is-danger': errors.has('paper.department')}"
-                  :message="errors.first('paper.department')"
+                  :type="{'is-danger': errors.has('userInfo.department')}"
+                  :message="errors.first('userInfo.department')"
                 >
                   <b-taginput
-                    v-model="paper.department"
+                    v-model="userInfo.department"
                     v-validate="'required'"
-                    name="paper.department"
+                    name="userInfo.department"
                     icon="label"
                     placeholder="添加单位"
                   />
@@ -38,13 +38,13 @@
 
                 <b-field
                   label="主题"
-                  :type="{'is-danger': errors.has('paper.topic')}"
-                  :message="errors.first('paper.topic')"
+                  :type="{'is-danger': errors.has('userInfo.topic')}"
+                  :message="errors.first('userInfo.topic')"
                 >
                   <b-select
-                    v-model="paper.topic"
+                    v-model="userInfo.topic"
                     v-validate="'required'"
-                    name="paper.topic"
+                    name="userInfo.topic"
                     placeholder="请选择主题"
                   >
                     <option
@@ -84,7 +84,7 @@ const valiDict = {
     'userInfo.topic': {
       required: '请选择主题'
     },
-    'paper.department': {
+    'userInfo.department': {
       required: '请输入部门，按回车键确认'
     }
   }
@@ -116,17 +116,16 @@ export default {
       const token = store.state.user.token
       if (token) {
         const res = await axios.get(`/users/me`, store.getters.getAuthHeader)
-        console.log(res)
+        console.log(res.data)
         if (res.data) {
           const _data = res.data
-          _data.department = _data.department.split(',')
-          // if (!_data.user || _data.user.id !== store.state.user.userInfo.id) {
-          //   // 防止看到其他用户的paper
-          //   error({ statusCode: 403, message: '权限错误' })
-          // } else {
-          //   return { userInfo: _data }
-          // }
-          return { userInfo: _data }
+          _data.department = typeof (_data.department) === 'string' ? _data.department.split(',') : []
+          if (!_data.id || _data.id !== store.state.user.userInfo.id) {
+            // 防止看到其他用户的paper
+            error({ statusCode: 403, message: '权限错误' })
+          } else {
+            return { userInfo: _data }
+          }
         } else {
           error({ statusCode: 404, message: '页面走丢了' })
         }
@@ -151,8 +150,12 @@ export default {
     },
     async handleSubmit() {
       try {
-        const data = Object.assign({}, this.userInfo)
-        data.department = data.department.split(',')
+        const data = {
+          username: this.userInfo.username,
+          topic: this.userInfo.topic,
+          department: this.userInfo.department
+        }
+        data.department = data.department.join(',')
 
         const res = await axios.put(`/users/${this.userInfo.id}`, data, this.headerAuth)
         if (res.data) {
