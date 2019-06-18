@@ -27,7 +27,9 @@
     <footer class="footer copyright">
       <div class="container">
         <p>
-          Copyright © <a href="#">工程热物理</a> | <a href="#">京ICP备15011708号-5</a> | 中国工程热物理学术年会
+          Copyright © <a href="http://www.cset.org.cn">中国工程热物理学会</a> | 
+          <a href="http://beian.miit.gov.cn">京ICP备15011708号-5</a> | 
+          <a href="http://www.thermophysics.cn">中国工程热物理学会工程热力学与能源利用分会</a>
         </p>
       </div>
     </footer>
