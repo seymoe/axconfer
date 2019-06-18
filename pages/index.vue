@@ -97,11 +97,11 @@ export default {
   },
   async asyncData({ req, store, redirect, error }) {
     try {
-      const res = await axios.get('/posts?_limit=10')
+      const res = await axios.get('/posts?_limit=10&_sort=id:desc')
       if (res.data) {
         const _l = res.data
         _l.forEach((item) => {
-          item.createdAt = dayjs(item.createdAt).format('YYYY-MM-DD')
+          item.createdAt = dayjs(item.created_at).format('YYYY-MM-DD')
         })
         return { postList: res.data }
       }

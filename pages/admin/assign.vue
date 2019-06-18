@@ -21,6 +21,7 @@
           </b-field>
         </b-field>
         <b-table
+          :narrowed="true"
           :data="paperFilterData"
           :columns="paperColumns"
           :checked-rows.sync="checkedPapers"
@@ -44,7 +45,8 @@
           </option>
         </b-select>
         <b-table
-          :data="profFiltrData"
+          :narrowed="true"
+          :data="profData"
           :columns="profColumns"
           :checked-rows.sync="checkedProfs"
           checkable
@@ -96,16 +98,16 @@ export default {
         { field: 'pid', label: '论文编号', width: '100' },
         { field: 'title', label: '论文标题', width: '300' },
         { field: 'topic', label: '领域', width: '120' },
-        { field: 'status', label: '状态', width: '120' },
         { field: 'keywords', label: '关键词', width: '120' },
-        { field: 'author', label: '作者', width: '120' }
+        { field: 'author', label: '作者', width: '120' },
+        { field: 'status', label: '状态', width: '120' }
       ],
       paperData: [],
       paperFilterData: [],
       checkedPapers: [],
       profColumns: [
-        { field: 'username', label: '教授姓名' }
-        // { field: 'topic', label: '教授领域' }
+        { field: 'username', label: '教授姓名' },
+        { field: 'department', label: '学校' }
       ],
       profData: [],
       checkedProfs: [],
@@ -116,10 +118,10 @@ export default {
   computed: {
     ...mapGetters({
       headerAuth: 'getAuthHeader'
-    }),
-    profFiltrData() {
-      return this.profData.filter(prof => prof.role.name === 'Professor')
-    }
+    })
+    // profFiltrData() {
+    //   return this.profData.filter(prof => prof.role.name === 'Professor')
+    // }
   },
   watch: {
     currentStatus(newVal, oldVal) {
@@ -147,7 +149,7 @@ export default {
         }
 
         // 拉取教授列表
-        const profRes = await axios.get('/users', store.getters.getAuthHeader)
+        const profRes = await axios.get('/users?role.name=Professor', store.getters.getAuthHeader)
         if (profRes.data) {
           returnData.profData = profRes.data
         }
@@ -217,7 +219,7 @@ export default {
     // 客户端拉取prof列表
     async fetchProfList() {
       try {
-        const profRes = await axios.get('/users', this.getAuthHeader)
+        const profRes = await axios.get('/users', this.headerAuth)
         this.profData = profRes.data
       } catch (err) {
         console.log(err)

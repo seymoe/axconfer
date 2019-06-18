@@ -21,9 +21,11 @@
                   <b-table-column label="发布日期" field="createdAt" width="160">
                     {{ props.row.createdAt }}
                   </b-table-column>
-
-                  <b-table-column label="通知标题">
+                  <b-table-column label="标题">
                     {{ props.row.title }}
+                  </b-table-column>
+                  <b-table-column label="分类">
+                    {{ props.row.category }}
                   </b-table-column>
                   <b-table-column field="action" label="操作" centered>
                     <nuxt-link class="button is-small" :to="'/admin/posts/' + props.row.id + '/edit'">
@@ -71,11 +73,11 @@ export default {
   },
   async asyncData(context) {
     try {
-      const res = await axios.get('/posts')
+      const res = await axios.get('/posts?_sort=id:desc')
       console.log(res.data)
       const _l = res.data
       _l.forEach((item) => {
-        item.createdAt = dayjs(item.createdAt).format('YYYY-MM-DD')
+        item.createdAt = dayjs(item.created_at).format('YYYY-MM-DD')
       })
       return { list: _l || [] }
     } catch (err) {

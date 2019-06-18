@@ -27,17 +27,11 @@
                   :type="{'is-danger': errors.has('userInfo.department')}"
                   :message="errors.first('userInfo.department')"
                 >
-                  <b-taginput
-                    v-model="userInfo.department"
-                    v-validate="'required'"
-                    name="userInfo.department"
-                    icon="label"
-                    placeholder="添加单位"
-                  />
+                  <b-input v-model="userInfo.department" v-validate="'required'" name="userInfo.department" />
                 </b-field>
 
                 <b-field
-                  label="主题"
+                  label="教授请选择主题"
                   :type="{'is-danger': errors.has('userInfo.topic')}"
                   :message="errors.first('userInfo.topic')"
                 >
@@ -85,7 +79,7 @@ const valiDict = {
       required: '请选择主题'
     },
     'userInfo.department': {
-      required: '请输入部门，按回车键确认'
+      required: '请输入单位'
     }
   }
 }
@@ -119,7 +113,8 @@ export default {
         console.log(res.data)
         if (res.data) {
           const _data = res.data
-          _data.department = typeof (_data.department) === 'string' ? _data.department.split(',') : []
+          // 此处department为string即可
+          // _data.department = typeof (_data.department) === 'string' ? _data.department.split(',') : []
           if (!_data.id || _data.id !== store.state.user.userInfo.id) {
             // 防止看到其他用户的paper
             error({ statusCode: 403, message: '权限错误' })
