@@ -12,6 +12,15 @@
             <b>Total checked</b>: {{ checkedUser.length }}
           </template>
         </b-table>
+        <b-pagination
+          :total="userData.length"
+          :current.sync="current"
+          per-page="10"
+          aria-next-label="Next page"
+          aria-previous-label="Previous page"
+          aria-page-label="Page"
+          aria-current-label="Current page"
+        />
       </div>
       <div class="column is-8">
         <form>
@@ -64,7 +73,10 @@ export default {
         { field: 'email', label: '邮箱' }
       ],
       title: '',
-      content: ''
+      content: '',
+
+      // 用户列表分页相关
+      current: 1
     }
   },
   computed: {
@@ -78,7 +90,11 @@ export default {
       const userId = store.state.user.userInfo.id
       if (user.token && userId) {
         const returnData = {}
-        const res = await axios.get('/users', store.getters.getAuthHeader)
+        // 总用户数
+        // const count = await axios.get('/users/count', store.getters.getAuthHeader)
+        // console.log('count', count)
+        // 用户列表
+        const res = await axios.get('/users?_limit=10&_start=0', store.getters.getAuthHeader)
         if (res.data) {
           returnData.userData = res.data
         }
@@ -87,6 +103,7 @@ export default {
         redirect('/login')
       }
     } catch (err) {
+      console.log(err)
       error({ statusCode: err.statusCode, message: err.message })
     }
   },

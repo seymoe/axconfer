@@ -1,17 +1,16 @@
 <template>
   <div>
-    <br>
     <section class="container">
       <div class="columns">
-        <div class="column is-3">
-          <Sidebar />
-        </div>
-        <div class="column is-9">
+        <div class="column is-12">
           <div class="card">
             <header class="card-header">
               <p class="card-header-title">
                 所有通知
               </p>
+              <nuxt-link class="btn-new button is-primary" :to="'/admin/posts/new'">
+                新增文章
+              </nuxt-link>
             </header>
             <div class="card-content">
               <b-table
@@ -24,9 +23,15 @@
                   </b-table-column>
 
                   <b-table-column label="通知标题">
-                    <nuxt-link :to="'/posts/' + props.row.id">
-                      {{ props.row.title }}
+                    {{ props.row.title }}
+                  </b-table-column>
+                  <b-table-column field="action" label="操作" centered>
+                    <nuxt-link class="button is-small" :to="'/admin/posts/' + props.row.id + '/edit'">
+                      编辑
                     </nuxt-link>
+                    <span class="button is-small">
+                      删除
+                    </span>
                   </b-table-column>
                 </template>
 
@@ -53,14 +58,12 @@
 </template>
 
 <script>
-import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 import dayjs from 'dayjs'
 
 export default {
-  components: {
-    Sidebar
-  },
+  middleware: 'auth',
+  layout: 'nohero',
   data() {
     return {
       list: []
@@ -68,7 +71,7 @@ export default {
   },
   async asyncData(context) {
     try {
-      const res = await axios.get('/posts?_sort=created_at:DESC')
+      const res = await axios.get('/posts')
       console.log(res.data)
       const _l = res.data
       _l.forEach((item) => {
@@ -81,3 +84,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.btn-new{
+  margin-top: 5px;
+  margin-right: 15px;
+}
+</style>
