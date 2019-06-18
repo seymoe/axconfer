@@ -91,8 +91,7 @@ import axios from '~/plugins/axios'
 import XLSX from 'xlsx'
 import { mapGetters } from 'vuex'
 import { TOPIC_ENUM } from '~/config'
-
-const download = require('downloadjs')
+import FileSaver from 'file-saver'
 
 export default {
   middleware: 'auth',
@@ -263,13 +262,15 @@ export default {
       const url = paper.file.url
       const author = paper.author.split(',', 1)
       const filename = `${paper.pid}+${author}` + paper.file.ext
+      // const mime = paper.file.mime
       console.log(filename)
-      const mime = paper.file.mime
-      const x = new XMLHttpRequest()
-      x.open('GET', url, true)
-      x.responseType = 'blob'
-      x.onload = (e) => { download(e.target.response, filename, mime) }
-      x.send()
+      FileSaver.saveAs(url, filename)
+
+      // const x = new XMLHttpRequest()
+      // x.open('GET', url, true)
+      // x.responseType = 'blob'
+      // x.onload = (e) => { console.log('download!') }
+      // x.send()
     }
   }
 }

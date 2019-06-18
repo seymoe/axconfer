@@ -80,8 +80,8 @@ export default {
       },
       reviewColumns: [
         { field: 'presentation', label: '推荐展示', width: 200 },
-        { field: 'level', label: '推荐等级', width: 200 },
-        { field: 'recommend', label: '推荐期刊', width: 200 },
+        // { field: 'level', label: '推荐等级', width: 200 },
+        // { field: 'recommend', label: '推荐期刊', width: 200 },
         { field: 'content', label: '评阅意见', width: 500 }
       ]
     }
