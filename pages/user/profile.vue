@@ -27,10 +27,17 @@
                   :type="{'is-danger': errors.has('userInfo.department')}"
                   :message="errors.first('userInfo.department')"
                 >
-                  <b-input v-model="userInfo.department" v-validate="'required'" name="userInfo.department" />
+                  <b-taginput
+                    v-model="userInfo.department"
+                    v-validate="'required'"
+                    name="userInfo.department"
+                    icon="label"
+                    placeholder="添加单位"
+                  />
                 </b-field>
 
                 <b-field
+                  v-if="userInfo.role.name === 'Professor'"
                   label="教授请选择主题"
                   :type="{'is-danger': errors.has('userInfo.topic')}"
                   :message="errors.first('userInfo.topic')"
@@ -108,8 +115,9 @@ export default {
   async asyncData({ req, params, store, redirect, error }) {
     try {
       const token = store.state.user.token
+      // console.log(token)
       if (token) {
-        const res = await axios.get(`/users/me`, store.getters.getAuthHeader)
+        const res = await axios.get(`/users/${store.state.user.userInfo.id}`, store.getters.getAuthHeader)
         console.log(res.data)
         if (res.data) {
           const _data = res.data
@@ -152,6 +160,10 @@ export default {
         }
         data.department = data.department.join(',')
 
+        // 只有Professor需要设置topic
+        if (this.userInfo.role.name !== 'Professor') {
+          delete data.topic
+        }
         const res = await axios.put(`/users/${this.userInfo.id}`, data, this.headerAuth)
         if (res.data) {
           this.$notification.open({

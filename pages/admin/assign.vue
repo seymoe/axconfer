@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="columns">
-      <div class="column is-10">
+      <div class="column is-9">
         <b-field class="flex-row">
           <div style="display: flex;justify-content: start">
             <b-radio-button
@@ -46,7 +46,9 @@
               {{ props.row.status }}
             </b-table-column>
             <b-table-column field="action" label="操作" width="60">
-              <button @click="handleDownloadPaper(props.row)">下载</button>
+              <button @click="handleDownloadPaper(props.row)">
+                下载
+              </button>
             </b-table-column>
           </template>
 
@@ -56,9 +58,12 @@
         </b-table>
       </div>
 
-      <div class="column is-2">
+      <div class="column is-3">
         <!-- 筛选话题 -->
-        <b-select placeholder="请选择">
+        <b-select v-model="topic" placeholder="请选择">
+          <option :value="null">
+            全部
+          </option>
           <option
             v-for="(option, idx) in topics"
             :key="idx"
@@ -69,7 +74,7 @@
         </b-select>
         <b-table
           :narrowed="true"
-          :data="profData"
+          :data="profFiltrList"
           :columns="profColumns"
           :checked-rows.sync="checkedProfs"
           checkable
@@ -79,14 +84,16 @@
           </template>
         </b-table>
         <div class="block">
-          <b-radio 
+          <b-radio
             v-model="type"
-            native-value="初审">
+            native-value="初审"
+          >
             初审
           </b-radio>
-          <b-radio 
+          <b-radio
             v-model="type"
-            native-value="终审">
+            native-value="终审"
+          >
             终审
           </b-radio>
         </div>
@@ -149,16 +156,21 @@ export default {
       profData: [],
       checkedProfs: [],
       type: '初审',
-      topics: TOPIC_ENUM
+      topics: TOPIC_ENUM,
+      topic: null
     }
   },
   computed: {
     ...mapGetters({
       headerAuth: 'getAuthHeader'
-    })
-    // profFiltrData() {
-    //   return this.profData.filter(prof => prof.role.name === 'Professor')
-    // }
+    }),
+    profFiltrList() {
+      if (this.topic) {
+        return this.profData.filter(prof => prof.topic === this.topic)
+      } else {
+        return this.profData
+      }
+    }
   },
   watch: {
     currentStatus(newVal, oldVal) {

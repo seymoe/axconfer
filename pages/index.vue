@@ -54,8 +54,8 @@
             <div class="card-content">
               <div class="content">
                 <p><b>举办地址：</b>{{ confer.address }}</p>
-                <p><b>联系电话：</b>{{ confer.phone }}</p>
-                <p><b>官方邮箱：</b>{{ confer.email }}</p>
+                <p><b>联系电话：</b><span>{{ confer.phone || '' }}</span></p>
+                <p><b>官方邮箱：</b><span>{{ confer.email || '' }}</span></p>
               </div>
             </div>
           </div>
