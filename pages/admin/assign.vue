@@ -31,7 +31,7 @@
               {{ props.row.pid }}
             </b-table-column>
             <b-table-column field="title" label="论文标题" width="300">
-              <a :href="props.row.file.url" :download="`${props.row.pid}+${props.row.author}`">{{ props.row.title }}</a>
+              {{ props.row.title }}
             </b-table-column>
             <b-table-column field="topic" label="领域" width="120">
               {{ props.row.topic }}
@@ -44,6 +44,9 @@
             </b-table-column>
             <b-table-column field="status" label="状态" width="90">
               {{ props.row.status }}
+            </b-table-column>
+            <b-table-column field="action" label="操作" width="60">
+              <button @click="handleDownloadPaper(props.row)">下载</button>
             </b-table-column>
           </template>
 
@@ -88,6 +91,8 @@ import axios from '~/plugins/axios'
 import XLSX from 'xlsx'
 import { mapGetters } from 'vuex'
 import { TOPIC_ENUM } from '~/config'
+
+const download = require('downloadjs')
 
 export default {
   middleware: 'auth',
@@ -252,6 +257,19 @@ export default {
       XLSX.utils.book_append_sheet(wb, ws, 'paper')
       // console.log(wb)
       XLSX.writeFile(wb, 'papers.xlsx')
+    },
+    // 下载论文
+    handleDownloadPaper(paper) {
+      const url = paper.file.url
+      const author = paper.author.split(',', 1)
+      const filename = `${paper.pid}+${author}` + paper.file.ext
+      console.log(filename)
+      const mime = paper.file.mime
+      const x = new XMLHttpRequest()
+      x.open('GET', url, true)
+      x.responseType = 'blob'
+      x.onload = (e) => { download(e.target.response, filename, mime) }
+      x.send()
     }
   }
 }
