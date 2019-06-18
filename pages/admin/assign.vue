@@ -288,12 +288,6 @@ export default {
       // const mime = paper.file.mime
       console.log(filename)
       FileSaver.saveAs(url, filename)
-
-      // const x = new XMLHttpRequest()
-      // x.open('GET', url, true)
-      // x.responseType = 'blob'
-      // x.onload = (e) => { console.log('download!') }
-      // x.send()
     }
   }
 }
