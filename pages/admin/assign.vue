@@ -278,6 +278,10 @@ export default {
     },
     // 下载论文
     handleDownloadPaper(paper) {
+      if (!paper.file) {
+        alert('未上传论文')
+        return
+      }
       const url = paper.file.url
       const author = paper.author.split(',', 1)
       const filename = `${paper.pid}${author}` + paper.file.ext
