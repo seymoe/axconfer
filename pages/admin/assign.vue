@@ -78,6 +78,19 @@
             <b>Total checked</b>: {{ checkedProfs.length }}
           </template>
         </b-table>
+        <div class="block">
+          <b-radio 
+            v-model="type"
+            native-value="初审">
+            初审
+          </b-radio>
+          <b-radio 
+            v-model="type"
+            native-value="终审">
+            终审
+          </b-radio>
+        </div>
+        <br>
         <button class="button is-primary" @click="handleAssign">
           分配论文至教授
         </button>
@@ -135,7 +148,7 @@ export default {
       ],
       profData: [],
       checkedProfs: [],
-
+      type: '初审',
       topics: TOPIC_ENUM
     }
   },
@@ -209,11 +222,17 @@ export default {
           const paperId = this.checkedPapers[i].id
           for (let j = 0; j < this.checkedProfs.length; j++) {
             const profId = this.checkedProfs[j].id
-            const data = { paperId: paperId, userId: profId }
+            const data = { paperId: paperId, userId: profId, type: this.type }
             await axios.post('/reviews', data, this.headerAuth)
           }
           // 分配评阅后论文状态是评阅中
-          await axios.put(`/papers/${paperId}`, { status: '评阅中' }, this.headerAuth)
+          let status = ''
+          if (this.type === '初审') {
+            status = '初审评阅中'
+          } else {
+            status = '终审评阅中'
+          }
+          await axios.put(`/papers/${paperId}`, { status: status }, this.headerAuth)
         }
 
         this.$notification.open({
@@ -261,7 +280,7 @@ export default {
     handleDownloadPaper(paper) {
       const url = paper.file.url
       const author = paper.author.split(',', 1)
-      const filename = `${paper.pid}+${author}` + paper.file.ext
+      const filename = `${paper.pid}${author}` + paper.file.ext
       // const mime = paper.file.mime
       console.log(filename)
       FileSaver.saveAs(url, filename)

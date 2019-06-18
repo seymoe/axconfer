@@ -43,3 +43,13 @@ export const POST_CATEGORY = [
   '新闻',
   '下载'
 ]
+
+// 会议进度状态
+export const STATUS_ENUM = [
+  '开始',
+  '初审评阅中',
+  '初审评阅完毕',
+  '终审评阅中',
+  '终审评阅完毕',
+  '结束'
+]
