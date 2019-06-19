@@ -108,6 +108,7 @@ export default {
             position: 'is-top-right'
           })
           setTimeout(() => {
+            // console.log('prof01的token为 ', res.data.jwt)
             this.$store.commit('user/setToken', res.data.jwt)
             this.$store.commit('user/setUserInfo', res.data.user)
             Cookie.set('token', res.data.jwt)
