@@ -5,15 +5,24 @@
         <b-field class="flex-row">
           <div style="display: flex;justify-content: start">
             <b-radio-button
-              v-for="item in statusArr"
-              :key="item.value"
+              v-for="(item,index) in statusArr"
+              :key="index"
               v-model="currentStatus"
-              :native-value="item.value"
+              :native-value="item"
               type="is-info"
             >
-              <span>{{ item.label }}</span>
+              <span>{{ item }}</span>
             </b-radio-button>
           </div>
+          <b-select v-model="year" placeholder="请选择">
+            <option
+              v-for="(y, idx) in years"
+              :key="idx"
+              :value="y"
+            >
+              {{ y }}
+            </option>
+          </b-select>
           <b-field>
             <b-button type="is-info" @click="handleExportCsv">
               导出论文列表
@@ -110,7 +119,7 @@
 import axios from '~/plugins/axios'
 import XLSX from 'xlsx'
 import { mapGetters } from 'vuex'
-import { TOPIC_ENUM } from '~/config'
+import { TOPIC_ENUM, STATUS_ENUM, YEAR_ENUM } from '~/config'
 import FileSaver from 'file-saver'
 
 export default {
@@ -119,24 +128,8 @@ export default {
   data() {
     return {
       // 筛选论文的条件
-      statusArr: [
-        {
-          label: '全部',
-          value: '全部'
-        },
-        {
-          label: '未评阅',
-          value: '未评阅'
-        },
-        {
-          label: '评阅中',
-          value: '评阅中'
-        },
-        {
-          label: '已评阅',
-          value: '已评阅'
-        }
-      ],
+      statusArr: STATUS_ENUM,
+      years: YEAR_ENUM,
       currentStatus: '全部',
       paperColumns: [
         { field: 'pid', label: '论文编号', width: '100' },
@@ -177,11 +170,16 @@ export default {
       console.log(newVal, oldVal)
       this.checkedPapers = []
       this.checkedProfs = []
-      if (newVal === this.statusArr[0].value) {
+      if (newVal === this.statusArr[0]) {
         this.paperFilterData = this.paperData
       } else {
         this.paperFilterData = this.paperData.filter(paper => paper.status === newVal
         )
+      }
+    },
+    year(newVal) {
+      if (newVal) {
+        this.fetchPaperList()
       }
     }
   },
@@ -191,10 +189,12 @@ export default {
       const userId = store.state.user.userInfo.id
       if (user.token && userId) {
         const returnData = {}
-        const res = await axios.get('/papers', store.getters.getAuthHeader)
+        const cyear = new Date().getFullYear()
+        const res = await axios.get(`/papers?year=${cyear}`, store.getters.getAuthHeader)
         if (res.data) {
           returnData.paperData = res.data
           returnData.paperFilterData = res.data
+          returnData.year = cyear
         }
 
         // 拉取教授列表
@@ -262,9 +262,12 @@ export default {
     // 客户端拉取paper列表
     async fetchPaperList() {
       try {
-        const res = await axios.get('/papers', this.headerAuth)
+        const res = await axios.get(`/papers?year=${this.year}`, this.headerAuth)
         if (res.data) {
           this.paperData = res.data
+          this.currentStatus = '全部'
+        } else {
+          this.paperData = []
           this.currentStatus = '全部'
         }
       } catch (err) {
