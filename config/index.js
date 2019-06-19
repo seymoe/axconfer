@@ -46,10 +46,16 @@ export const POST_CATEGORY = [
 
 // 会议进度状态
 export const STATUS_ENUM = [
+  '全部',
   '开始',
   '初审评阅中',
   '初审评阅完毕',
   '终审评阅中',
   '终审评阅完毕',
   '结束'
+]
+
+// 论文年份选择
+export const YEAR_ENUM = [
+  2019
 ]

@@ -1,9 +1,12 @@
 <template>
   <div class="container">
     <div class="columns">
-      <div class="column is-4">
+      <div class="column is-4 table-wrap">
         <b-table
+          :paginated="true"
           :data="userData"
+          :per-page="10"
+          :pagination-simple="true"
           :columns="userColumns"
           :checked-rows.sync="checkedUser"
           checkable
@@ -12,18 +15,14 @@
             <b>Total checked</b>: {{ checkedUser.length }}
           </template>
         </b-table>
-        <b-pagination
-          :total="userData.length"
-          :current.sync="current"
-          per-page="10"
-          aria-next-label="Next page"
-          aria-previous-label="Previous page"
-          aria-page-label="Page"
-          aria-current-label="Current page"
-        />
       </div>
       <div class="column is-8">
         <form>
+          <b-field
+            label="收件人："
+          >
+            <b-input v-model="receiver" disabled />
+          </b-field>
           <b-field
             label="邮件标题："
             :type="{'is-danger': errors.has('title')}"
@@ -82,7 +81,15 @@ export default {
   computed: {
     ...mapGetters({
       headerAuth: 'getAuthHeader'
-    })
+    }),
+    receiver() {
+      if (this.checkedUser.length) {
+        const _c = this.checkedUser.map(u => u.email)
+        return _c.join(' ; ')
+      } else {
+        return ''
+      }
+    }
   },
   async asyncData({ req, store, redirect, error }) {
     try {
@@ -94,7 +101,7 @@ export default {
         // const count = await axios.get('/users/count', store.getters.getAuthHeader)
         // console.log('count', count)
         // 用户列表
-        const res = await axios.get('/users?_limit=10&_start=0', store.getters.getAuthHeader)
+        const res = await axios.get('/users', store.getters.getAuthHeader)
         if (res.data) {
           returnData.userData = res.data
         }
@@ -144,7 +151,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .btn-send{
   margin-top: 14px;
 }
