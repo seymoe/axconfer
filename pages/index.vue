@@ -2,7 +2,7 @@
   <div>
     <div class="box cta">
       <p class="has-text-centered">
-        <span class="tag is-primary">New</span> {{ confer.title }} -- {{ confer.address }}
+        <span class="tag is-primary">New</span> {{ confer.info || `${confer.title} -- ${confer.address}` }}
       </p>
     </div>
     <section class="container">
