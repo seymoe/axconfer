@@ -10,9 +10,10 @@
             {{ conferList[0]['title'] }}
           </h1>
           <h2 class="subtitle">
-            {{ conferList[0]['subtitle'].split('----')[0] }}
-            <br>
-            {{ conferList[0]['subtitle'].split('----')[1] }}
+            {{ conferList[0]['subtitle'] }}
+          </h2>
+          <h2 class="subtitle">
+            {{ conferList[0]['address'] }}
           </h2>
         </div>
       </div>
