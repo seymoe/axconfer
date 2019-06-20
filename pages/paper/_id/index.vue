@@ -48,7 +48,10 @@
               </p>
               <p>
                 <b>管理论文：</b><br>
-                <b-button @click="isDeleteModalActive = true">删除论文</b-button>
+                <nuxt-link class="button is-small is-info" :to="'/paper/'">
+                  编辑
+                </nuxt-link>
+                <b-button @click="isDeleteModalActive = true" type="is-danger" size="is-small">删除论文</b-button>
                 <b-modal :active.sync="isDeleteModalActive" :width="400">
                   <modal-delete v-bind="modalProps"></modal-delete>
                 </b-modal>
