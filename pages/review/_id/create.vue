@@ -23,6 +23,9 @@
               <b-field horizontal label="论文PID：">
                 <p>{{ review.paper.pid }}</p>
               </b-field>
+              <b-field horizontal label="论文状态：">
+                <p>{{ review.paper.status }}</p>
+              </b-field>
               <b-field horizontal label="作者：">
                 <p>{{ review.paper.author }}</p>
               </b-field>
@@ -213,6 +216,13 @@ export default {
             type: 'is-success',
             position: 'is-top-right'
           })
+          if (this.review.paper.status === '初审评阅中') {
+            await axios.put(`/papers/${this.review.paperId}`, { status: '初审评阅完成' }, this.headerAuth)
+          } else if (this.review.paper.status === '终审评阅中') {
+            await axios.put(`/papers/${this.review.paperId}`, { status: '终审评阅完成' }, this.headerAuth)
+          } else {
+            console.log(this.review.paper.status)
+          }
           this.$router.push('/review/me')
         }
       } catch (err) {
