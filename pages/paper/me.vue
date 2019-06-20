@@ -57,9 +57,13 @@
                 </template>
               </b-table>
               <div class="foot">
-                <nuxt-link class="button is-primary" :to="'/paper/create'">
+                <nuxt-link v-if="conference.status === '开始'" class="button is-primary" :to="'/paper/create'">
                   创建论文
                 </nuxt-link>
+                <b-button v-else class="is-light" disabled>
+                  评阅中
+                  {{ conference.status }}
+                </b-button>
               </div>
             </div>
           </div>
@@ -91,7 +95,15 @@ export default {
   computed: {
     ...mapGetters({
       headerAuth: 'getAuthHeader'
-    })
+    }),
+    conference() {
+      const l = this.$store.state.conference
+      if (l && l.length) {
+        return l[0]
+      } else {
+        return {}
+      }
+    }
   },
 
   async asyncData({ req, store, redirect, error }) {
