@@ -17,6 +17,12 @@
               <b-field horizontal label="论文标题：">
                 <p>{{ review.paper.title }}</p>
               </b-field>
+              <b-field horizontal label="论文PID：">
+                <p>
+                  点击下载：
+                  <a :href="review.paper.file.url">{{ review.paper.pid }}</a>
+                </p>
+              </b-field>
               <b-field horizontal label="作者：">
                 <p>{{ review.paper.author }}</p>
               </b-field>

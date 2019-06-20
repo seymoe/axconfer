@@ -20,7 +20,7 @@
               >
                 <template slot-scope="props">
                   <b-table-column field="paper.pid" label="论文编号">
-                    <a :href="props.row.paper.file.url">{{ props.row.paper.title }}</a>
+                    {{ props.row.paper.pid }}
                   </b-table-column>
 
                   <b-table-column field="title" label="论文标题">
