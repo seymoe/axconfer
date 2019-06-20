@@ -19,6 +19,10 @@
                 :hoverable="true"
               >
                 <template slot-scope="props">
+                  <b-table-column field="review.id" label="ID">
+                    {{ props.row.id }}
+                  </b-table-column>
+
                   <b-table-column field="paper.pid" label="论文编号">
                     {{ props.row.paper.pid }}
                   </b-table-column>
@@ -27,8 +31,12 @@
                     {{ props.row.paper.title }}
                   </b-table-column>
 
-                  <b-table-column field="topic" label="评阅状态">
+                  <b-table-column field="topic" label="论文状态">
                     {{ props.row.paper.status }}
+                  </b-table-column>
+
+                  <b-table-column field="topic" label="评阅类型">
+                    {{ props.row.type }}
                   </b-table-column>
 
                   <b-table-column field="action" label="操作" centered>
@@ -74,10 +82,12 @@ export default {
   data() {
     return {
       paperColumns: [
+        { field: 'review.id', label: '评阅ID', width: '100' },
         { field: 'paper.pid', label: '论文编号', width: '100' },
         { field: 'paper.title', label: '论文标题', width: '300' },
-        { field: 'paper.status', label: '评阅状态', width: '120' },
-        { field: '', label: '操作', width: '120' }
+        { field: 'paper.status', label: '论文状态', width: '120' },
+        { field: 'review.type', label: '评阅类型', width: '100' },
+        { field: '', label: '操作', width: '100' }
       ],
       paperData: []
     }
@@ -87,7 +97,7 @@ export default {
       headerAuth: 'getAuthHeader'
     })
   },
-  async asyncData({ req, store, redirect }) {
+  async asyncData({ req, store, redirect, error }) {
     try {
       const token = store.state.user.token
       const userId = store.state.user.userInfo.id
@@ -103,11 +113,18 @@ export default {
       const reviewData = res.data
       for (let i = 0; i < reviewData.length; i++) {
         const paperId = reviewData[i].paperId
-        const { data: paper } = await axios.get(`/papers/${paperId}`, store.getters.getAuthHeader)
-        reviewData[i].paper = {}
-        reviewData[i].paper.title = paper.title
-        reviewData[i].paper.pid = paper.pid
-        reviewData[i].paper.status = paper.status
+        try {
+          const { data: paper } = await axios.get(`/papers/${paperId}`, store.getters.getAuthHeader)
+          reviewData[i].paper = {}
+          reviewData[i].paper.title = paper.title
+          reviewData[i].paper.pid = paper.pid
+          reviewData[i].paper.status = paper.status
+        } catch (err) {
+          reviewData[i].paper = {}
+          reviewData[i].paper.title = '论文未找到（已被用户删除，请联系管理员删除评阅）'
+          reviewData[i].paper.pid = ''
+          reviewData[i].paper.status = ''
+        }
       }
       return { reviewData: reviewData }
     } catch (err) {

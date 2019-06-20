@@ -17,7 +17,7 @@
               <b-field horizontal label="论文标题：">
                 <p>{{ review.paper.title }}</p>
               </b-field>
-              <b-field horizontal label="下载链接">
+              <b-field horizontal label="下载链接：">
                 <p><a :href="fileUrl">{{ review.paper.title }}</a></p>
               </b-field>
               <b-field horizontal label="论文PID：">
