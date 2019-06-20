@@ -176,7 +176,7 @@ export default {
             type: 'is-success',
             position: 'is-top-right'
           })
-          this.$router.push('/paper/me')
+          this.$router.replace('/paper/me')
         }
       } catch (err) {
         console.log(err)
