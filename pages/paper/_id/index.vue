@@ -42,20 +42,25 @@
               <p v-else>
                 论文未上传
               </p>
-              <p>
+              <div>
                 <b>评阅：</b>
                 <b-table :data="paper.reviews" :columns="reviewColumns" />
-              </p>
-              <p>
+              </div>
+              <div>
                 <b>管理论文：</b><br>
-                <nuxt-link class="button is-small is-info" :to="'/paper/'">
+                <nuxt-link class="button is-small is-info" :to="'/paper/' + paper.id + '/edit'">
                   编辑
                 </nuxt-link>
-                <b-button @click="isDeleteModalActive = true" type="is-danger" size="is-small">删除论文</b-button>
+                <b-button type="is-danger" size="is-small" @click="isDeleteModalActive = true">
+                  删除论文
+                </b-button>
                 <b-modal :active.sync="isDeleteModalActive" :width="400">
-                  <modal-delete v-bind="modalProps"></modal-delete>
+                  <modal-delete
+                    v-bind="modalProps"
+                    :delete-func="handleDeletePaper"
+                  />
                 </b-modal>
-              </p>
+              </div>
             </div>
           </div>
         </div>
@@ -157,6 +162,25 @@ export default {
       }
     } catch (err) {
       error({ statusCode: err.statusCode, message: err.message })
+    }
+  },
+  methods: {
+    async handleDeletePaper() {
+      try {
+        const _id = this.modalProps.id
+        const res = await axios.delete(`/papers/${_id}`, this.headerAuth)
+        console.log(res)
+        if (res) {
+          this.$notification.open({
+            message: '论文删除成功',
+            type: 'is-success',
+            position: 'is-top-right'
+          })
+          this.$router.push('/paper/me')
+        }
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }

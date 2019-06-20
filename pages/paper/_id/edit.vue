@@ -260,14 +260,35 @@ export default {
         data.department = this.paper.department.join(',')
         data.keywords = this.paper.keywords.join(',')
 
-        // const formData = new FormData()
-        // for (const key in data) {
-        //   if (data.hasOwnProperty(key)) {
-        //     formData.append(key, data[key])
-        //   }
-        // }
-
         const res = await axios.put(`/papers/${this.paper.id}`, data, this.headerAuth)
+        if (res.data) {
+          if (this.paper.file && !this.paper.file.id) {
+            this.uploadDoc()
+          } else {
+            this.$notification.open({
+              message: '论文编辑成功',
+              type: 'is-success',
+              position: 'is-top-right'
+            })
+            this.$router.push('/paper/me')
+          }
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+
+    async uploadDoc() {
+      try {
+        const formData = new FormData()
+        formData.append('files', this.paper.file)
+        formData.append('refId', this.paper.id)
+        formData.append('ref', 'paper')
+        formData.append('field', 'file')
+        const res = await axios.post('/upload', formData, Object.assign(this.headerAuth, {
+          'Content-Type': 'multipart/form-data'
+        }))
+        console.log(res)
         if (res.data) {
           this.$notification.open({
             message: '论文编辑成功',
