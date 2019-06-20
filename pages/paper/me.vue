@@ -61,7 +61,7 @@
                   创建论文
                 </nuxt-link>
                 <b-button v-else class="is-light" disabled>
-                  评阅中
+                  无法创建论文
                   {{ conference.status }}
                 </b-button>
               </div>
