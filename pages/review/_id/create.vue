@@ -15,10 +15,7 @@
             </header>
             <div class="card-content">
               <b-field horizontal label="论文标题：">
-                <p>{{ review.paper.title }}</p>
-              </b-field>
-              <b-field horizontal label="下载链接：">
-                <p><a :href="fileUrl">{{ review.paper.title }}</a></p>
+                <p>{{ review.paper.title }} <button @click="handleDownloadPaper(review.paper)">下载</button></p>
               </b-field>
               <b-field horizontal label="论文PID：">
                 <p>{{ review.paper.pid }}</p>
@@ -114,6 +111,7 @@ import Sidebar from '~/components/Sidebar.vue'
 import axios from '~/plugins/axios'
 import { mapGetters } from 'vuex'
 import { PRESENTATION_ENUM, LEVEL_ENUM, RECOMMEND_ENUM } from '~/config'
+import FileSaver from 'file-saver'
 
 const valiDict = {
   custom: {
@@ -228,6 +226,18 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    handleDownloadPaper(paper) {
+      if (!paper.file) {
+        alert('未上传论文')
+        return
+      }
+      const url = paper.file.url
+      const author = paper.author.split(',', 1)
+      const filename = `${paper.pid}${author}` + paper.file.ext
+      // const mime = paper.file.mime
+      console.log(filename)
+      FileSaver.saveAs(url, filename)
     }
   }
 }
