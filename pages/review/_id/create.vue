@@ -17,24 +17,20 @@
               <b-field horizontal label="论文标题：">
                 <p>{{ review.paper.title }}</p>
               </b-field>
+              <b-field horizontal label="下载链接">
+                <p><a :href="fileUrl">{{ review.paper.title }}</a></p>
+              </b-field>
               <b-field horizontal label="论文PID：">
-                <p>
-                  点击下载：
-                  <a :href="review.paper.file.url">{{ review.paper.pid }}</a>
-                </p>
+                <p>{{ review.paper.pid }}</p>
               </b-field>
               <b-field horizontal label="作者：">
                 <p>{{ review.paper.author }}</p>
               </b-field>
               <b-field horizontal label="单位：">
-                <p>论文单位</p>
+                <p>{{ review.paper.department }}</p>
               </b-field>
               <b-field horizontal label="关键词：">
-                <p>
-                  <b-tag v-for="item in keywords" :key="item" style="margin-right: 12px">
-                    {{ item }}
-                  </b-tag>
-                </p>
+                <p>{{ review.paper.keywords }}</p>
               </b-field>
               <b-field horizontal label="主题：">
                 <p>{{ review.paper.topic }}</p>
@@ -154,15 +150,7 @@ export default {
   computed: {
     ...mapGetters({
       headerAuth: 'getAuthHeader'
-    }),
-    keywords() {
-      if (this.review.paper && this.review.paper.keywords) {
-        const arr = this.review.paper.keywords.split(',')
-        return arr
-      } else {
-        return []
-      }
-    }
+    })
   },
   async asyncData({ req, params, store, redirect, error }) {
     try {
@@ -172,7 +160,6 @@ export default {
         const paperId = review.paperId
         const { data: paper } = await axios.get(`/papers/${paperId}`, store.getters.getAuthHeader)
         review.paper = paper
-        // console.log(review)
         if (review) {
           if (Number(review.userId) !== store.state.user.userInfo.id) {
             error({ statusCode: 403, message: '权限错误' })
@@ -185,9 +172,14 @@ export default {
               paperId: review.paperId,
               userId: review.userId
             }
+            let fileUrl = '#'
+            if (review.paper.file) {
+              fileUrl = review.paper.file.url
+            }
             return {
               review: review,
-              form: _form
+              form: _form,
+              fileUrl: fileUrl
             }
           }
         } else {
