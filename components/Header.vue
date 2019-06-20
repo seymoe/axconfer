@@ -66,10 +66,10 @@
                   管理文章
                 </b-dropdown-item>
               </template>
-              <b-dropdown-item aria-role="listitem" @click="$router.push('/user/profile')">
+              <!-- <b-dropdown-item aria-role="listitem" @click="$router.push('/user/profile')">
                 <b-icon icon="logout" size="is-small" />
                 我的资料
-              </b-dropdown-item>
+              </b-dropdown-item> -->
               <b-dropdown-item aria-role="listitem" @click="handleLogout">
                 <b-icon icon="logout" size="is-small" />
                 退出登录
