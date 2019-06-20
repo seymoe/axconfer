@@ -15,6 +15,7 @@
             </header>
             <div class="card-content">
               <p><b>标题：</b>{{ paper.title }}</p>
+              <p><b>PID：</b>{{ paper.pid }}</p>
               <p>
                 <b>作者：</b><b-tag v-for="(item, index) in author" :key="index" style="margin-right: 12px">
                   {{ item }}
@@ -45,6 +46,13 @@
                 <b>评阅：</b>
                 <b-table :data="paper.reviews" :columns="reviewColumns" />
               </p>
+              <p>
+                <b>管理论文：</b><br>
+                <b-button @click="isDeleteModalActive = true">删除论文</b-button>
+                <b-modal :active.sync="isDeleteModalActive" :width="400">
+                  <modal-delete v-bind="modalProps"></modal-delete>
+                </b-modal>
+              </p>
             </div>
           </div>
         </div>
@@ -55,6 +63,7 @@
 
 <script>
 import Sidebar from '~/components/Sidebar.vue'
+import ModalDelete from '~/components/ModalDelete.vue'
 import axios from '~/plugins/axios'
 import { mapGetters } from 'vuex'
 
@@ -62,10 +71,12 @@ export default {
   middleware: 'auth',
   layout: 'nohero',
   components: {
-    Sidebar
+    Sidebar,
+    ModalDelete
   },
   data() {
     return {
+      isDeleteModalActive: false,
       paper: {
         pid: '',
         title: '',
@@ -112,6 +123,12 @@ export default {
         return arr
       } else {
         return []
+      }
+    },
+    modalProps() {
+      return {
+        id: this.paper.id,
+        pid: this.paper.pid
       }
     }
   },

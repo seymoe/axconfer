@@ -39,9 +39,6 @@
                     <nuxt-link class="button is-small" :to="'/paper/' + props.row.id + '/edit'">
                       编辑
                     </nuxt-link>
-                    <span class="button is-small">
-                      删除
-                    </span>
                   </b-table-column>
                 </template>
 
