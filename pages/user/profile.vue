@@ -27,17 +27,9 @@
                   :type="{'is-danger': errors.has('userInfo.department')}"
                   :message="errors.first('userInfo.department')"
                 >
-                  <b-taginput
-                    v-model="userInfo.department"
-                    v-validate="'required'"
-                    name="userInfo.department"
-                    icon="label"
-                    placeholder="添加单位"
-                  />
+                  <b-input v-model="userInfo.department" v-validate="'required'" placeholder="添加单位" name="userInfo.department" />
                 </b-field>
-
                 <b-field
-                  v-if="userInfo.role.name === 'Professor'"
                   label="教授请选择主题"
                   :type="{'is-danger': errors.has('userInfo.topic')}"
                   :message="errors.first('userInfo.topic')"
@@ -102,7 +94,7 @@ export default {
       userInfo: {
         username: '',
         topic: '',
-        department: []
+        department: ''
       },
       topics: TOPIC_ENUM
     }
@@ -121,8 +113,6 @@ export default {
         console.log(res.data)
         if (res.data) {
           const _data = res.data
-          // 此处department为string即可
-          // _data.department = typeof (_data.department) === 'string' ? _data.department.split(',') : []
           if (!_data.id || _data.id !== store.state.user.userInfo.id) {
             // 防止看到其他用户的paper
             error({ statusCode: 403, message: '权限错误' })
@@ -149,6 +139,8 @@ export default {
         if (result) {
           this.handleSubmit()
         }
+      }).catch((err) => {
+        console.log(err)
       })
     },
     async handleSubmit() {
@@ -158,12 +150,20 @@ export default {
           topic: this.userInfo.topic,
           department: this.userInfo.department
         }
-        data.department = data.department.join(',')
+
+        if (data.username.length < 2 || data.username.length > 15) {
+          this.$notification.open({
+            message: '用户名长度区间为 2-15',
+            type: 'is-warning',
+            position: 'is-top'
+          })
+          return false
+        }
 
         // 只有Professor需要设置topic
-        if (this.userInfo.role.name !== 'Professor') {
-          delete data.topic
-        }
+        // if (this.userInfo.role.name !== 'Professor') {
+        //   delete data.topic
+        // }
         const res = await axios.put(`/users/${this.userInfo.id}`, data, this.headerAuth)
         if (res.data) {
           this.$notification.open({
@@ -171,6 +171,19 @@ export default {
             type: 'is-success',
             position: 'is-top-right'
           })
+          this.clientFetchUserInfo()
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+
+    async clientFetchUserInfo() {
+      try {
+        const res = await axios.get(`/users/${this.userInfo.id}`, this.headerAuth)
+        if (res.data) {
+          // this.userInfo = res.data
+          this.$store.commit('user/setUserInfo', res.data)
         }
       } catch (err) {
         console.log(err)
